@@ -141,22 +141,22 @@ function UpdateFlot(){
 	);
 };
 function UpdateCurrentData(){
-	for(i=0;i<<?=$sensor_num?>;i++){
-		$.getJSON("dht_json.php?s="+i,function(dhtJSON){
-			if(dhtJSON["Status"] == "OK"){
-				var LastDate = dhtJSON["LastDate"];
-				if(dhtJSON["Count"]>=1){
-					time = new Date(LastDate*1000).toString();
-					t = dhtJSON["Data"][0][0];
-					h = dhtJSON["Data"][0][1];
-					$("#currentdata_t"+dhtJSON["Sensor"]).html(t);
-					$("#currentdata_h"+dhtJSON["Sensor"]).html(h);
-					$("#currenttime").html(time);
-					}
+	$.getJSON("dht_json.php?s=all",function(dhtJSON){
+		if(dhtJSON["Status"] == "OK" && dhtJSON["Sensor"] == "all"){
+			var LastDate = dhtJSON["LastDate"];
+			if(dhtJSON["Count"]>=1){
+				time = new Date(LastDate*1000).toString();
+				for(i=0;i<<?=$sensor_num?>;i++){
+					t = dhtJSON["Data"][i][0];
+					h = dhtJSON["Data"][i][1];
+					$("#currentdata_t"+i).html(t);
+					$("#currentdata_h"+i).html(h);
+				}
+				$("#currenttime").html(time);
 				}
 			}
-		);
-	}
+		}
+	);
 };
 $(document).ready(function () {
     UpdateFlot();

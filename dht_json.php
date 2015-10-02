@@ -2,12 +2,20 @@
 include "/var/mysql_conn/mysql_conn.php";
 
 //Get count
-$query_sensor = $_GET['s'];
-if($query_sensor=='' || !is_numeric($query_sensor)) $query_sensor=0;
-
-//Get count
 $query_count = $_GET['c'];
 if($query_count=='' || !is_numeric($query_count)) $query_count=1;
+
+//Get sensor#
+$query_sensor = $_GET['s'];
+if(strtolower($query_sensor)=='all')
+{
+	$query_sensor = 'all';
+	$query_count=1;
+}
+else
+{
+	if($query_sensor=='' || !is_numeric($query_sensor)) $query_sensor=0;
+}
 
 //Get from id
 $query_from = $_GET['f'];
@@ -62,26 +70,38 @@ while ($row = mysql_fetch_array($result)) {
 	// Get the last ID
 	if($LastID < (int)$row[0]) $LastID = (int)$row[0];
 
-	// Get the last ID
+	// Get the last date
 	if($LastDate < strtotime($row[2])) $LastDate = strtotime($row[2]);
+		
+	if(is_numeric($query_sensor)){
 
-	// Get temperature
-	if(preg_match_all("/T:([-\d]*)C/U",$row[1],$t)){
-		if(count($t[1])<$query_sensor+1) $row_array[0] = 0;
-		else $row_array[0] = (int)$t[1][$query_sensor];
-	}else{
-		$row_array[0] = 0;
+		// Get temperature
+		if(preg_match_all("/T:([-\d]*)C/U",$row[1],$t)){
+			if(count($t[1])<$query_sensor+1) $row_array[0] = 0;
+			else $row_array[0] = (float)$t[1][$query_sensor];
+		}else{
+			$row_array[0] = 0;
+		}
+		// Get humidity
+		if(preg_match_all("/H:([-\d]*)%/U",$row[1],$h)){
+			if(count($h[1])<$query_sensor+1) $row_array[1] = 0;
+			else $row_array[1] = (float)$h[1][$query_sensor];
+		}else{
+			$row_array[1] = 0;
+		}
+		array_push($DhtArray, $row_array);
 	}
-	// Get humidity
-	if(preg_match_all("/H:([-\d]*)%/U",$row[1],$t)){
-		if(count($t[1])<$query_sensor+1) $row_array[1] = 0;
-		else $row_array[1] = (int)$t[1][$query_sensor];
-	}else{
-		$row_array[1] = 0;
+	else
+	{
+		preg_match_all("/T:([-\d]*)C/U",$row[1],$t);
+		preg_match_all("/H:([-\d]*)%/U",$row[1],$h);
+		foreach($t[1] as $key => $valus){
+			$row_array[0] = $t[1][$key];
+			$row_array[1] = $h[1][$key];
+			array_push($DhtArray, $row_array);
+		}
+		
 	}
-	// Get datetime
-	// $row_array['D'] = strtotime($row[2]);
-	array_push($DhtArray, $row_array);
 }
 
 

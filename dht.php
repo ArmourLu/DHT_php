@@ -7,18 +7,21 @@ if($sensor_num=='' || !is_numeric($sensor_num)) $sensor_num=3;
 <html xmlns="http://www.w3.org/1999/xhtml">    
 <head>
 <style type="text/css">
-	body {font-family:Verdana, Arial;margin: 0;padding: 0;} 
+	body {font-family:Verdana, Arial;margin: 0;padding: 0;}
 	.flot-placeholder{width:600px;height:200px;font-size:24px;text-align: center;margin:0 auto;}
-	.normaltext{height:80px;line-height:80px;font-size:24px;text-align: center;margin:0 auto;color:#666666;vertical-align:middle;}
+	.normaltext{height:100px;line-height:100px;font-size:24px;text-align: center;margin:0 auto;color:#777777;vertical-align:middle;}
 	#sensor_sel{font-size:24px;text-align: center;margin:0 auto;}
 	.sensorname{width:40px;font-size:35px;text-align: left;display: inline-block;*display: inline;zoom: 1;color:#999999;}
 	.item{width:40px;font-size:30px;text-align: center;display: inline-block;*display: inline;zoom: 1;}
 	.currentdata{width:100px;height:120px;font-size:80px;text-align: center;display: inline-block;*display: inline;zoom: 1;}
 	.unit{width:40px;font-size:30px;text-align: right;display: inline-block;*display: inline;zoom: 1;}
-	.newline0{margin:0 auto;text-align:center;background-color: #eeeeee;}
-	.newline1{margin:0 auto;text-align:center;background-color: #e6e6e6;}
+	.bgcolor0{margin:0 auto;text-align:center;background-color: #eeeeee;font-size:24px;}
+	.bgcolor1{margin:0 auto;text-align:center;background-color: #e6e6e6;font-size:24px;}
 	.notice{width:400px;font-size:15px;color:#666666;margin:0 auto;text-align: right;}
+	.minheight{height:100px;line-height:100px;};
 </style>
+<!-- 最新編譯和最佳化的 CSS -->
+<link rel="stylesheet" href="/bootstrap//css/bootstrap.min.css">
 <link rel="stylesheet" href="/ui/jquery-ui-themes-1.11.4/themes/start/jquery-ui.css">
 <script type="text/javascript" src="/js/flot/jquery.js"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/js/flot/excanvas.min.js"></script><![endif]-->
@@ -28,6 +31,7 @@ if($sensor_num=='' || !is_numeric($sensor_num)) $sensor_num=3;
 <script type="text/javascript" src="/js/flot/jquery.flot.symbol.js"></script>
 <script src="/ui/jquery-ui-1.11.4/jquery-ui.js"></script>
 <script src="/js/jquery.nicescroll.js"></script>
+<script src="/js/jquery.expandable.js"></script>
 <script type="text/javascript">
 function UpdateFlot(){
 	if($('input[name=radio1]:checked').val() == -1){
@@ -175,7 +179,7 @@ $(document).ready(function () {
 <?php
 for($i=0;$i < $sensor_num;$i++){
 ?>
-    <div class="newline<?=$i%2?>">
+    <div class="bgcolor<?=$i%2?>">
     	<div class="sensorname">#<?=$i?></div
     	><div class="item"></div
     	><div id="currentdata_t<?=$i?>" class="currentdata"></div
@@ -187,8 +191,15 @@ for($i=0;$i < $sensor_num;$i++){
 <?php
 };
 ?>
+    <div class="normaltext" title="When Pi2/Remote Temperature Monitoring System is Ready, we will send you a notice.">Alert Me!</div>
+    <div id="alterme" class="bgcolor0 minheight">
+<form class="form-inline" role="form">
+      <input type="email" class="form-control input-lg" id="email" placeholder="Email Address">
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</form>
+    </div>
     <div class="normaltext">Sensor Graph</div>
-    <div id="sensor_sel">
+    <div id="sensor_sel" class="bgcolor0 minheight">
 	<input type="radio" name="radio1" id="radioX" value="-1" checked="true"><label for="radioX">Disable</label>
 <?php
 for($i=0;$i < $sensor_num;$i++){
@@ -197,8 +208,8 @@ for($i=0;$i < $sensor_num;$i++){
 <?php
 };
 ?>
-    </div></br>
-    <div id="SensorGraph"></br>
+    </div>
+    <div id="SensorGraph" class="bgcolor0"></br>
     <div id="flot-placeholder_t" class="flot-placeholder"></div></br>
     <div id="flot-placeholder_h" class="flot-placeholder"></div></br></br>
     </div>

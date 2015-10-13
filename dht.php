@@ -4,24 +4,12 @@ $sensor_num = $_GET['s'];
 if($sensor_num=='' || !is_numeric($sensor_num)) $sensor_num=3;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">    
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">    
 <head>
-<style type="text/css">
-	body {font-family:Verdana, Arial;margin: 0;padding: 0;}
-	.flot-placeholder{width:600px;height:200px;font-size:24px;text-align: center;margin:0 auto;}
-	.normaltext{height:100px;line-height:100px;font-size:24px;text-align: center;margin:0 auto;color:#777777;vertical-align:middle;}
-	#sensor_sel{font-size:24px;text-align: center;margin:0 auto;}
-	.sensorname{width:40px;font-size:35px;text-align: left;display: inline-block;*display: inline;zoom: 1;color:#999999;}
-	.item{width:40px;font-size:30px;text-align: center;display: inline-block;*display: inline;zoom: 1;}
-	.currentdata{width:100px;height:120px;font-size:80px;text-align: center;display: inline-block;*display: inline;zoom: 1;}
-	.unit{width:40px;font-size:30px;text-align: right;display: inline-block;*display: inline;zoom: 1;}
-	.bgcolor0{margin:0 auto;text-align:center;background-color: #eeeeee;font-size:24px;}
-	.bgcolor1{margin:0 auto;text-align:center;background-color: #e6e6e6;font-size:24px;}
-	.notice{width:400px;font-size:15px;color:#666666;margin:0 auto;text-align: right;}
-	.minheight{height:100px;line-height:100px;};
-</style>
-<!-- 最新編譯和最佳化的 CSS -->
-<link rel="stylesheet" href="/bootstrap//css/bootstrap.min.css">
+<meta charset="utf-8">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/ui/jquery-ui-themes-1.11.4/themes/start/jquery-ui.css">
 <script type="text/javascript" src="/js/flot/jquery.js"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/js/flot/excanvas.min.js"></script><![endif]-->
@@ -175,43 +163,61 @@ $(document).ready(function () {
 </script>
 </head>
 <body>
-    <div id="currenttime" title="Update Time" class="normaltext"></div>
+    <div class="container">
+        <div id="currenttime" title="Update Time" class="normaltext"></div>
 <?php
 for($i=0;$i < $sensor_num;$i++){
 ?>
-    <div class="bgcolor<?=$i%2?>">
-    	<div class="sensorname">#<?=$i?></div
-    	><div class="item"></div
-    	><div id="currentdata_t<?=$i?>" class="currentdata"></div
-    	><div class="unit">&deg;C</div
-    	><div class="item"></div
-    	><div id="currentdata_h<?=$i?>"  class="currentdata"></div
-    	><div class="unit">%</div>
-    </div>
+            <div class="bgcolor<?=$i%2?>">
+                <div class="sensorname">#<?=$i?></div>
+                <div class="item"></div>
+                <div id="currentdata_t<?=$i?>" class="currentdata"></div>
+                <div class="unit">&deg;C</div>
+                <div class="item"></div>
+                <div id="currentdata_h<?=$i?>" class="currentdata"></div>
+                <div class="unit">%</div>
+            </div>
 <?php
 };
 ?>
-    <div class="normaltext" title="When Pi2/Remote Temperature Monitoring System is Ready, we will send you a notice.">Alert Me!</div>
-    <div id="alterme" class="bgcolor0 minheight">
-<form class="form-inline" role="form">
-      <input type="email" class="form-control input-lg" id="email" placeholder="Email Address">
-      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-</form>
-    </div>
-    <div class="normaltext">Sensor Graph</div>
-    <div id="sensor_sel" class="bgcolor0 minheight">
-	<input type="radio" name="radio1" id="radioX" value="-1" checked="true"><label for="radioX">Disable</label>
+                <div class="normaltext" title="When Pi2/Remote Temperature Monitoring System is Ready, we will send you a notice.">Alert Me!</div>
+                <div id="alterme" class="bgcolor0">
+                    <form class="form-horizontal" action="">
+                        <div class="form-group">
+                            <label for="email" class="col-sm-4 control-label">Email</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control input-lg" id="email" placeholder="Email Address">
+                            </div>
+                            <div class="col-sm-4" id="alertstatus"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="normaltext">Sensor Graph</div>
+                <div id="sensor_sel" class="bgcolor0 minheight">
+                    <input type="radio" name="radio1" id="radioX" value="-1" checked="true">
+                    <label for="radioX">Disable</label>
 <?php
 for($i=0;$i < $sensor_num;$i++){
 ?>
-	<input type="radio" name="radio1" id="radio<?=$i?>" value="<?=$i?>"><label for="radio<?=$i?>">#<?=$i?></label>
+                        <input type="radio" name="radio1" id="radio<?=$i?>" value="<?=$i?>">
+                        <label for="radio<?=$i?>">#<?=$i?></label>
 <?php
 };
 ?>
-    </div>
-    <div id="SensorGraph" class="bgcolor0"></br>
-    <div id="flot-placeholder_t" class="flot-placeholder"></div></br>
-    <div id="flot-placeholder_h" class="flot-placeholder"></div></br></br>
+                </div>
+                <div id="SensorGraph" class="bgcolor1">
+                    </br>
+                    <div id="flot-placeholder_t" class="flot-placeholder"></div>
+                    </br>
+                    <div id="flot-placeholder_h" class="flot-placeholder"></div>
+                    </br>
+                    </br>
+                </div>
     </div>
 </body>
 </html>

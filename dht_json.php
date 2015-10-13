@@ -1,5 +1,5 @@
 <?php
-include "/var/mysql_conn/mysql_conn.php";
+include "/var/www_private/mysql_conn.php";
 
 //Get count
 $query_count = $_GET['c'];

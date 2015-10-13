@@ -1,0 +1,68 @@
+	.flot-placeholder,
+	.normaltext,
+	#sensor_sel {
+	    font-size: 24px;
+	    text-align: center;
+	    margin: 0 auto;
+	}
+	
+	.flot-placeholder {
+	    width: 600px;
+	    height: 200px;
+	}
+	
+	.normaltext {
+	    height: 100px;
+	    line-height: 100px;
+	    color: #777777;
+	    vertical-align: middle;
+	}
+	
+	.sensorname,
+	.item,
+	.currentdata,
+	.unit {
+	    display: inline-block;
+	    *display: inline;
+	    zoom: 1;
+	    text-align: center;
+	}
+	
+	.item,
+	.unit,
+	.sensorname {
+	    width: 40px;
+	    font-size: 30px;
+	}
+	
+	.sensorname {
+	    color: #999999;
+	}
+	
+	.currentdata {
+	    width: 100px;
+	    height: 120px;
+	    line-height: 120px;
+	    font-size: 80px;
+	}
+	
+	.bgcolor0,
+	.bgcolor1 {
+	    margin: 0 auto;
+	    text-align: center;
+	    font-size: 24px;
+	    border-radius: 12px;
+	}
+	
+	.bgcolor0 {
+	    background-color: #f0f0f0;
+	}
+	
+	.bgcolor1 {
+	    background-color: #e6e6e6;
+	}
+	
+	.minheight {
+	    height: 100px;
+	    line-height: 100px;
+	}

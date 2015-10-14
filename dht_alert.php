@@ -14,7 +14,8 @@ if($cmd == "verify")
 elseif($cmd == "add")
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $status = "Error: Invalid Email Format";
+      $status = "Error";
+      $comment = "Invalid Email Format";
     }
     else
     {
@@ -24,8 +25,6 @@ elseif($cmd == "add")
         $count = $row[0];
         if($count == 0)
         {
-            $hash_secret = "@#/%&854f_gh7FH4";
-            $datetime = date ("Y- m - d / H : i : s").microtime();
             $hash = email_hash($email);
             $sqlstr = "insert into useralert (Email, Type, Enabled, Hash) VALUES ('$email', 'boot;', FALSE, '$hash')";
             //mysql_query($sqlstr);
@@ -44,9 +43,11 @@ else
     $status = "Error";
     $comment = "Invalid Command";
 }
+$returnjson['cmd'] = $cmd;
+$returnjson['email'] = $email;
 $returnjson['Status'] = $status;
 $returnjson['Comment'] = $comment;
-$returnjson['ServerIP'] = $_SERVER['SERVER_ADDR'];
-$returnjson['hash'] = $hash;
+//$returnjson['ServerIP'] = $_SERVER['SERVER_ADDR'];
+//$returnjson['hash'] = $hash;
 echo json_encode($returnjson);
 ?>

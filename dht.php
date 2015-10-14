@@ -159,63 +159,90 @@ $(document).ready(function () {
     $("#sensor_sel").buttonset();
     $( document ).tooltip({track: true});
     $("html").niceScroll();
+    $("#alertsubmit").click(function(){
+        if($("#alertemail").val()=="") return;
+        $("#alertsubmit").attr('disabled',true);
+        $("#alertemail").attr('disabled',true);
+        $.getJSON("dht_alert.php?cmd=add&email="+$("#alertemail").val(),function(alertresult){
+            if(alertresult["Status"]=="OK"){
+                $("#alertresult").html('<strong>Success!</strong> '+alertresult["Comment"]);
+            }else{
+                $("#alertresult").html('<strong>Error!</strong> '+alertresult["Comment"]);
+            }
+        });
+        $("#alertsubmit").attr('disabled',false);
+        $("#alertemail").attr('disabled',false);
+    });
+    $("#alertemail").keypress(function(){
+        $("#alertresult").html("");
+    });
+    $("#alertclear").click(function(){
+        $("#alertemail").val('');
+        $("#alertresult").html("");
+    });
 });
+</script>
+<script>
 </script>
 </head>
 <body>
     <div class="container">
-        <div id="currenttime" title="Update Time" class="normaltext"></div>
-<?php
+        <div id="currenttime" title="Update Time" class="headertext text-center"></div>
+        <?php
 for($i=0;$i < $sensor_num;$i++){
 ?>
-            <div class="bgcolor<?=$i%2?>">
-                <div class="sensorname">#<?=$i?></div>
-                <div class="item"></div>
-                <div id="currentdata_t<?=$i?>" class="currentdata"></div>
-                <div class="unit">&deg;C</div>
-                <div class="item"></div>
-                <div id="currentdata_h<?=$i?>" class="currentdata"></div>
-                <div class="unit">%</div>
+            <div class="bgcolor<?=$i%2?> text-center infotext">
+                <span><?="#".$i?></span>
+                <span></span>
+                <span id="currentdata_t<?=$i?>" class="currentdata"></span>
+                <span>&deg;C</span>
+                <span></span>
+                <span id="currentdata_h<?=$i?>" class="currentdata"></span>
+                <span>%</span>
             </div>
-<?php
+            <?php
 };
 ?>
-                <div class="normaltext" title="When Pi2/Remote Temperature Monitoring System is Ready, we will send you a notice.">Alert Me!</div>
+                <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is Ready, we will send you a notice.">Alert Me!</div>
                 <div id="alterme" class="bgcolor0">
-                    <form class="form-horizontal" action="">
-                        <div class="form-group">
-                            <label for="email" class="col-sm-4 control-label">Email</label>
-                            <div class="col-sm-4">
-                                <input type="email" class="form-control input-lg" id="email" placeholder="Email Address">
-                            </div>
-                            <div class="col-sm-4" id="alertstatus"></div>
+                    <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <input id="alertemail" type="email" class="form-control input-lg" id="email" placeholder="Email Address">
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-4">
-                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                            </div>
+                        <div class="col-sm-4">
+                            <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>
+                            <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                           <div id="alertresult" class="smallinfotext text-center"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="normaltext">Sensor Graph</div>
-                <div id="sensor_sel" class="bgcolor0 minheight">
-                    <input type="radio" name="radio1" id="radioX" value="-1" checked="true">
-                    <label for="radioX">Disable</label>
-<?php
+                <div class="headertext text-center">Sensor Graph</div>
+                <div class="bgcolor0 text-center">
+                    <div id="sensor_sel">
+                        <input type="radio" name="radio1" id="radioX" value="-1" checked="true">
+                        <label for="radioX">Disable</label>
+                        <?php
 for($i=0;$i < $sensor_num;$i++){
 ?>
-                        <input type="radio" name="radio1" id="radio<?=$i?>" value="<?=$i?>">
-                        <label for="radio<?=$i?>">#<?=$i?></label>
-<?php
+                            <input type="radio" name="radio1" id="radio<?=$i?>" value="<?=$i?>">
+                            <label for="radio<?=$i?>"><?="#".$i?>
+                            </label>
+                            <?php
 };
 ?>
+                    </div>
                 </div>
-                <div id="SensorGraph" class="bgcolor1">
+                <div id="SensorGraph" class="bgcolor1 infotext">
                     </br>
                     <div id="flot-placeholder_t" class="flot-placeholder"></div>
                     </br>
                     <div id="flot-placeholder_h" class="flot-placeholder"></div>
-                    </br>
                     </br>
                 </div>
     </div>

@@ -1,57 +1,41 @@
-	.flot-placeholder,
-	.normaltext,
+    .flot-placeholder,
+	.headertext,
+    .infotext,
 	#sensor_sel {
 	    font-size: 24px;
-	    text-align: center;
-	    margin: 0 auto;
 	}
 	
+    .smallinfotext {
+        font-size: 16px;
+        height: 24px;
+    }
 	.flot-placeholder {
 	    width: 600px;
 	    height: 200px;
 	}
 	
-	.normaltext {
+	.headertext {
 	    height: 100px;
 	    line-height: 100px;
-	    color: #777777;
+	    color: #666666;
 	    vertical-align: middle;
 	}
 	
-	.sensorname,
-	.item,
-	.currentdata,
-	.unit {
-	    display: inline-block;
-	    *display: inline;
-	    zoom: 1;
-	    text-align: center;
-	}
-	
-	.item,
-	.unit,
-	.sensorname {
-	    width: 40px;
-	    font-size: 30px;
-	}
-	
-	.sensorname {
-	    color: #999999;
+	.infotext,
+    .smallinfotext {
+	    color: #666666;
 	}
 	
 	.currentdata {
-	    width: 100px;
-	    height: 120px;
-	    line-height: 120px;
+        color: #333333;
 	    font-size: 80px;
 	}
 	
 	.bgcolor0,
 	.bgcolor1 {
-	    margin: 0 auto;
-	    text-align: center;
-	    font-size: 24px;
 	    border-radius: 12px;
+	    padding: 5px;
+	    margin: 5px;
 	}
 	
 	.bgcolor0 {
@@ -60,9 +44,4 @@
 	
 	.bgcolor1 {
 	    background-color: #e6e6e6;
-	}
-	
-	.minheight {
-	    height: 100px;
-	    line-height: 100px;
 	}

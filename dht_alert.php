@@ -22,11 +22,11 @@ if($cmd == "verify")
     }
     else
     {
-        $sqlstr = "select hash,Enabled from useralert where ID='$id'";
+        $sqlstr = "select hash, Enabled from useralert where ID='$id'";
         $result = mysql_query($sqlstr);
         $row = mysql_fetch_array($result);
-        $hash = $row[0];
-        $Enabled = $row[1];
+        $hash = $row['hash'];
+        $Enabled = $row['Enabled'];
         if($hash == $key)
         {
             if($Enabled == true)
@@ -36,7 +36,7 @@ if($cmd == "verify")
             }else
             {
                 $status = "success";
-                $comment = "Your alert is activated.";
+                $comment = "Your alert is activated now.";
                 $sqlstr = "update useralert set Enabled=TRUE where ID='$id'";
                 $result = mysql_query($sqlstr);
             }
@@ -78,12 +78,17 @@ elseif($cmd == "add")
             else
             {
                 $UpdateTime = new DateTime($row['UpdateTime']);
+                $UpdateTime->modify("+10 minutes");
                 $curtime = new DateTime();
                 
                 if($curtime > $UpdateTime)
                 {
                     $status = "info";
-                    $comment = "Check your Email to activate your alert.";
+                    $comment = "Resent. Check your Email to activate your alert.";
+                    $curtime = date("Y-m-d H:i:s");
+                    $id = $row['ID'];
+                    $sqlstr = "update useralert set UpdateTime='$curtime' where ID=$id";
+                    mysql_query($sqlstr);
                 }
                 else
                 {
@@ -106,7 +111,5 @@ $returnjson['Comment'] = $comment;
 //$returnjson['ServerIP'] = $_SERVER['SERVER_ADDR'];
 //$returnjson['hash'] = $hash;
 //$returnjson['key'] = $key;
-$returnjson['UpdateTime'] = $UpdateTime;
-$returnjson['curtime'] = $curtime;
 echo json_encode($returnjson);
 ?>

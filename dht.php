@@ -230,7 +230,7 @@ $(document).ready(function () {
             <div id="currenttime" title="Update Time" class="col-lg-8 text-center"></div>
         </div>
     </div>
-    <div class="headertext text-center">Pi2/Remote Temperature Monitoring System</div>
+    <div class="headertext text-center" title="by Armour Lu, Software Dept. II">Pi2/Remote Temperature Monitoring System</div>
 <? for($i=0;$i < $sensor_num;$i++){ ?>
         <div class="bgcolor<?=$i%2?> text-center infotext">
             <span><?="#".$i?></span>

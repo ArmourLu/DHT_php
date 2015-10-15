@@ -1,47 +1,76 @@
-    .flot-placeholder,
-	.headertext,
-    .infotext,
-	#sensor_sel {
-	    font-size: 24px;
-	}
-	
-    .smallinfotext {
-        font-size: 16px;
-        height: 24px;
+    body {
+    font-family: 'Ubuntu', sans-serif !important;
     }
-	.flot-placeholder {
-	    width: 600px;
-	    height: 200px;
-	}
-	
-	.headertext {
-	    height: 100px;
-	    line-height: 100px;
-	    color: #666666;
-	    vertical-align: middle;
-	}
-	
-	.infotext,
+
+    .ui-widget {
+    font-family: 'Ubuntu', sans-serif !important;
+    }
+
+    .flot-placeholder,
+    .headertext,
+    .infotext,
+    #sensor_sel {
+        font-size: 24px;
+    }
+    
+    .flot-placeholder {
+        margin: 0 auto;
+    }
+    
     .smallinfotext {
-	    color: #666666;
-	}
-	
-	.currentdata {
+        font-size: 20px;
+    }
+    
+    .flot-placeholder {
+        width: 600px;
+        height: 200px;
+    }
+    
+    .headertext {
+        height: 100px;
+        line-height: 100px;
+        color: #666666;
+        vertical-align: middle;
+    }
+    
+    .infotext,
+    .smallinfotext {
+        color: #666666;
+    }
+    
+    .currentdata {
         color: #333333;
-	    font-size: 80px;
-	}
-	
-	.bgcolor0,
-	.bgcolor1 {
-	    border-radius: 12px;
-	    padding: 5px;
-	    margin: 5px;
-	}
-	
-	.bgcolor0 {
-	    background-color: #f0f0f0;
-	}
-	
-	.bgcolor1 {
-	    background-color: #e6e6e6;
-	}
+        font-size: 80px;
+        font-family: 'Fjalla One', sans-serif;
+        width: 80px;
+        display: inline-block;
+        text-align:  left;
+    }
+    
+    .bgcolor0,
+    .bgcolor1,
+    .bgcolor2 {
+        border-radius: 12px;
+        padding: 3px;
+        margin: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .bgcolor0 {
+        background-color: #f0f0f0;
+    }
+    
+    .bgcolor1 {
+        background-color: #e6e6e6;
+    }
+
+    .bgcolor2 {
+        background-color: #f0f0f0;
+    }
+    
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }

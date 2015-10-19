@@ -1,12 +1,12 @@
     body {
     font-family: 'Ubuntu', sans-serif !important;
+    background-color: #f0f0f0 !important;
     }
 
     .ui-widget {
     font-family: 'Ubuntu', sans-serif !important;
     }
 
-    .flot-placeholder,
     .headertext,
     .infotext,
     #sensor_sel {
@@ -17,8 +17,9 @@
         margin: 0 auto;
     }
     
-    .smallinfotext {
+    .flot-placeholder {
         font-size: 20px;
+        font-family: 'Open Sans', sans-serif;
     }
     
     .flot-placeholder {
@@ -29,44 +30,53 @@
     .headertext {
         height: 100px;
         line-height: 100px;
-        color: #666666;
+        color: #333333;
         vertical-align: middle;
     }
     
     .infotext,
     .smallinfotext {
-        color: #666666;
+        color: #333333;
     }
     
+    .smallinfotext {
+    font-size: 20px;
+    }
+
     .currentdata {
         color: #333333;
         font-size: 80px;
-        font-family: 'Fjalla One', sans-serif;
-        width: 80px;
+        font-family: 'Roboto', sans-serif;
+        width: 90px;
         display: inline-block;
         text-align:  left;
     }
     
-    .bgcolor0,
-    .bgcolor1,
-    .bgcolor2 {
-        border-radius: 12px;
-        padding: 3px;
-        margin: 3px;
+    .block-data,
+    .block-info,
+    .block-header {
+        border-radius: 3px;
+        padding: 15px;
+        margin-top: 5px;
         padding-left: 10px;
         padding-right: 10px;
+        border: 1px;
+        border-style: solid;
     }
     
-    .bgcolor0 {
-        background-color: #f0f0f0;
+    .block-data {
+        background-color: #ffffff;
+        border-color: #dddddd;
     }
     
-    .bgcolor1 {
-        background-color: #e6e6e6;
+    .block-info {
+        background-color: #ffffff;
+        border-color: #afb4bf;
     }
 
-    .bgcolor2 {
-        background-color: #f0f0f0;
+    .block-header {
+        background-color: #ffffff;
+        border-color: #b79c9c;
     }
     
     .vcenter {

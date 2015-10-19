@@ -14,6 +14,11 @@ $key = strtolower($_GET['key']);
 //Get id
 $id = strtolower($_GET['id']);
 
+$sqlstr = "SELECT Value FROM sysinfo where Name='PythonPath'";
+$result = mysql_query($sqlstr);
+$row = mysql_fetch_row($result);
+$PythonPath = $row[0];
+
 if($cmd == "verify")
 {
     if (!is_numeric($id)) {
@@ -36,15 +41,16 @@ if($cmd == "verify")
             }else
             {
                 $status = "success";
-                $comment = "Your alert is activated now.";
-                $sqlstr = "update useralert set Enabled=TRUE where ID='$id'";
+                $comment = "Your alert is now activated.";
+                $curtime = date("Y-m-d H:i:s");
+                $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime' where ID='$id'";
                 $result = mysql_query($sqlstr);
             }
         }
         else
         {
             $status = "error";
-            $comment = "Wrong key value. We can't verify your email.";
+            $comment = "Wrong key value. We can't verify your email address.";
         }
     }
 }
@@ -52,7 +58,7 @@ elseif($cmd == "add")
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $status = "error";
-      $comment = "Invalid Email Format";
+      $comment = "Your email address is invalid.";
     }
     else
     {
@@ -65,7 +71,8 @@ elseif($cmd == "add")
             $sqlstr = "insert into useralert (Email, Type, Enabled, Hash, CreateTime, UpdateTime) VALUES ('$email', 'boot;', FALSE, '$hash', '$curtime', '$curtime')";
             mysql_query($sqlstr);
             $status = "info";
-            $comment = "Check your Email to activate your alert.";
+            $comment = "A confirmation email has been sent to your email address. Please click on the Activation Link to activate your alert.";
+            exec("python $PythonPath mail $email verify",$output);
         }
         else
         {
@@ -73,27 +80,28 @@ elseif($cmd == "add")
             if($row['Enabled'] == true)
             {
                 $status = "error";
-                $comment = "The Email has already been used.";
+                $comment = "The email address has already been used.";
             }
             else
             {
                 $UpdateTime = new DateTime($row['UpdateTime']);
-                $UpdateTime->modify("+10 minutes");
+                $UpdateTime->modify("+3 minutes");
                 $curtime = new DateTime();
                 
                 if($curtime > $UpdateTime)
                 {
                     $status = "info";
-                    $comment = "Resent. Check your Email to activate your alert.";
+                    $comment = "A confirmation email has been resent to your email address. Please click on the Activation Link to activate your alert.";
                     $curtime = date("Y-m-d H:i:s");
                     $id = $row['ID'];
                     $sqlstr = "update useralert set UpdateTime='$curtime' where ID=$id";
                     mysql_query($sqlstr);
+                    exec("python $PythonPath mail $email verify",$output);
                 }
                 else
                 {
                     $status = "warning";
-                    $comment = "If you didn't receive an Email to activate your alert, please submit your Email address again after 10 minues.";
+                    $comment = "If you didn't receive a confirmation email, please submit your email address again after 3 minues.";
                 }
             }
         }
@@ -104,7 +112,6 @@ else
     $status = "error";
     $comment = "Invalid Command";
 }
-//$returnjson['cmd'] = $cmd;
 //$returnjson['email'] = $email;
 $returnjson['Status'] = $status;
 $returnjson['Comment'] = $comment;

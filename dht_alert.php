@@ -113,11 +113,7 @@ else
     $status = "error";
     $comment = "Invalid Command";
 }
-//$returnjson['email'] = $email;
 $returnjson['Status'] = $status;
 $returnjson['Comment'] = $comment;
-//$returnjson['ServerIP'] = $_SERVER['SERVER_ADDR'];
-//$returnjson['hash'] = $hash;
-//$returnjson['key'] = $key;
 echo json_encode($returnjson);
 ?>

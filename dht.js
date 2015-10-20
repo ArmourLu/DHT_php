@@ -48,10 +48,14 @@ $(document).ready(function () {
         $("input").prop('disabled',true);
         $("button").prop('disabled',true);
         $.getJSON("dht_alert.php?cmd=add&email="+$("#alertemail").val(),function(alertresult){
-            swal(alertresult["Status"].toUpperCase(), alertresult["Comment"], alertresult["Status"].toLowerCase());
-            $("input").prop('disabled',false);
-            $("button").prop('disabled',false);
-            HoldOn.close();
+            swal({title:alertresult["Status"].toUpperCase(),
+                  text:alertresult["Comment"],
+                  type:alertresult["Status"].toLowerCase()
+                 },function(){
+                    $("input").prop('disabled',false);
+                    $("button").prop('disabled',false);
+                    HoldOn.close();
+            });
         });
     });
     $("#alertclear").click(function(){

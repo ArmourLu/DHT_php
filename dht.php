@@ -1,10 +1,6 @@
 <?
 include "/var/www_private/mysql_conn.php";
 
-//Get count
-$sensor_num = $_GET['s'];
-if($sensor_num=='' || !is_numeric($sensor_num)) $sensor_num=3;
-
 //Get command
 $cmd = strtolower($_GET['cmd']);
 
@@ -26,11 +22,11 @@ $result = mysql_query($sqlstr);
 $row = mysql_fetch_row($result);
 $str_ServiceName = $row[0];
 
-$sqlstr = "SELECT Value FROM sysinfo where Name='ServiceVer'";
+$sqlstr = "SELECT Value FROM sysinfo where Name='SensorCount'";
 $result = mysql_query($sqlstr);
 $row = mysql_fetch_row($result);
-$str_ServiceVer = $row[0];
-    
+$sensor_num = (int)$row[0];
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -53,75 +49,7 @@ $str_ServiceVer = $row[0];
 <script src="/sweetalert/sweetalert.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
 <script src="/HoldOn.js/js/HoldOn.js"></script>
-<script type="text/javascript">
-function UpdateCurrentData(){
-	$.getJSON("dht_json.php?s=all",function(dhtJSON){
-		if(dhtJSON["Status"] == "OK" && dhtJSON["Sensor"] == "all"){
-			var LastDate = dhtJSON["LastDate"];
-			if(dhtJSON["Count"]>=1){
-				time = new Date(LastDate*1000).toString();
-				for(i=0;i<<?=$sensor_num?>;i++){
-					t = dhtJSON["Data"][i][0];
-					h = dhtJSON["Data"][i][1];
-					$("#currentdata_t"+i).html(t);
-					$("#currentdata_h"+i).html(h);
-				}
-				$("#currenttime").html(time);
-				}
-			}
-		}
-	);
-};
-$(document).ready(function () {
-    UpdateCurrentData();
-    setInterval(UpdateCurrentData,1000);
-    $( document ).tooltip({track: true});
-    $("html").niceScroll();
-    $("#alertsubmit").click(function(){
-        if($("#alertemail").val()=="") return;
-        HoldOn.open({
-            theme:"sk-bounce",
-            message: "<h1> Please wait </h1>",
-            content:"",
-            backgroundColor:"black",
-            textColor:"white"
-        });
-        $("input").prop('disabled',true);
-        $("button").prop('disabled',true);
-        $.getJSON("dht_alert.php?cmd=add&email="+$("#alertemail").val(),function(alertresult){
-            if(swal){
-                swal(alertresult["Status"].toUpperCase(), alertresult["Comment"], alertresult["Status"].toLowerCase());
-            }
-            else
-            {
-                alert(alertresult["Status"].toUpperCase() + ": " + alertresult["Comment"]);
-            }
-            $("input").prop('disabled',false);
-            $("button").prop('disabled',false);
-            HoldOn.close();
-        });
-    });
-    $("#alertclear").click(function(){
-        $("#alertemail").val('');
-    });
-<? if($cmd != ''){ ?>
-    $.getJSON("dht_alert.php?cmd=<?=$cmd?>&id=<?=$id?>&key=<?=$key?>",function(alertresult){
-        if(swal){
-            swal(alertresult["Status"].toUpperCase(), alertresult["Comment"], alertresult["Status"].toLowerCase());
-        }
-        else
-        {
-            alert(alertresult["Status"].toUpperCase() + ": " + alertresult["Comment"]);
-        }
-        if(history.pushState){
-            history.pushState('','',location.href.split('?')[0]);
-        }
-    });
-<? } ?>
-});
-</script>
-<script>
-</script>
+<script src="dht.js"></script>
 </head>
 <body>
 <div class="container">
@@ -136,12 +64,10 @@ $(document).ready(function () {
     <div class="headertext text-center" title="by Armour Lu, Software Dept. II"><?=$str_ServiceName?></div>
 <? for($i=0;$i < $sensor_num;$i++){ ?>
         <div class="block-data text-center infotext">
-            <span><?="#".$i?></span>
-            <span>&nbsp;</span>
-            <span id="currentdata_t<?=$i?>" class="currentdata"></span>
+            <span class="reading"></span><span class="readingdecimal"></span>
             <span>&deg;C</span>
             <span>&nbsp;&nbsp;</span>
-            <span id="currentdata_h<?=$i?>" class="currentdata"></span>
+            <span class="reading"></span><span class="readingdecimal"></span>
             <span>%</span>
         </div>
 <? }; ?>

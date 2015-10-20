@@ -42,8 +42,9 @@ if($cmd == "verify")
             {
                 $status = "success";
                 $comment = "Your alert is now activated.";
+                $hash = email_hash($email);
                 $curtime = date("Y-m-d H:i:s");
-                $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime' where ID='$id'";
+                $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime', hash='$hash' where ID='$id'";
                 $result = mysql_query($sqlstr);
             }
         }

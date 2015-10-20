@@ -5,6 +5,11 @@ include "/var/www_private/mysql_conn.php";
 $query_count = $_GET['c'];
 if($query_count=='' || !is_numeric($query_count)) $query_count=1;
 
+//Get float format
+$query_ft = $_GET['ft'];
+if($query_ft=='' || !is_numeric($query_ft)) $query_ft=0;
+if($ft > 1) $ft = 1;
+
 //Get sensor#
 $query_sensor = $_GET['s'];
 if(strtolower($query_sensor)=='all')
@@ -64,6 +69,16 @@ $DhtArray = array();
 $LastID = 0;
 $LastDate = 0;
 $Count = 0;
+if($query_ft == 0)
+{
+    $t_pattern = "/T:([-\d]*)(\.\d*)?C/U";
+    $h_pattern = "/H:([-\d]*)(\.\d*)?%/U";
+}
+else
+{
+    $t_pattern = "/T:(.*)C/U";
+    $h_pattern = "/H:(.*)%/U";
+}
 while ($row = mysql_fetch_array($result)) {
 	$Count++;
 	
@@ -76,14 +91,14 @@ while ($row = mysql_fetch_array($result)) {
 	if(is_numeric($query_sensor)){
 
 		// Get temperature
-		if(preg_match_all("/T:([-\d]*)C/U",$row[1],$t)){
+		if(preg_match_all($t_pattern,$row[1],$t)){
 			if(count($t[1])<$query_sensor+1) $row_array[0] = 0;
 			else $row_array[0] = (float)$t[1][$query_sensor];
 		}else{
 			$row_array[0] = 0;
 		}
 		// Get humidity
-		if(preg_match_all("/H:([-\d]*)%/U",$row[1],$h)){
+		if(preg_match_all($h_pattern,$row[1],$h)){
 			if(count($h[1])<$query_sensor+1) $row_array[1] = 0;
 			else $row_array[1] = (float)$h[1][$query_sensor];
 		}else{
@@ -93,8 +108,8 @@ while ($row = mysql_fetch_array($result)) {
 	}
 	else
 	{
-		preg_match_all("/T:([-\d]*)C/U",$row[1],$t);
-		preg_match_all("/H:([-\d]*)%/U",$row[1],$h);
+		preg_match_all($t_pattern,$row[1],$t);
+		preg_match_all($h_pattern,$row[1],$h);
 		foreach($t[1] as $key => $valus){
 			$row_array[0] = $t[1][$key];
 			$row_array[1] = $h[1][$key];
@@ -107,7 +122,7 @@ while ($row = mysql_fetch_array($result)) {
 
 $returnjson['Status'] = "OK";
 $returnjson['LastID'] = $LastID;
-$returnjson['LastDate'] = $LastDate;
+$returnjson['LastDate'] = date('Y-m-d H:i:s', $LastDate);
 $returnjson['Count'] = $Count;
 $returnjson['Sensor'] = $query_sensor;
 $returnjson['Data'] = $DhtArray;

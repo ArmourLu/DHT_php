@@ -15,7 +15,6 @@ $query_sensor = $_GET['s'];
 if(strtolower($query_sensor)=='all')
 {
 	$query_sensor = 'all';
-	$query_count=1;
 }
 else
 {
@@ -89,7 +88,7 @@ while ($row = mysql_fetch_array($result)) {
 	if($LastDate < strtotime($row[2])) $LastDate = strtotime($row[2]);
 		
 	if(is_numeric($query_sensor)){
-
+        $SensorCount = 1;
 		// Get temperature
 		if(preg_match_all($t_pattern,$row[1],$t)){
 			if(count($t[1])<$query_sensor+1) $row_array[0] = 0;
@@ -110,9 +109,10 @@ while ($row = mysql_fetch_array($result)) {
 	{
 		preg_match_all($t_pattern,$row[1],$t);
 		preg_match_all($h_pattern,$row[1],$h);
+        $SensorCount = count($t[1]);
 		foreach($t[1] as $key => $valus){
-			$row_array[0] = $t[1][$key];
-			$row_array[1] = $h[1][$key];
+			$row_array[0] = (float)$t[1][$key];
+			$row_array[1] = (float)$h[1][$key];
 			array_push($DhtArray, $row_array);
 		}
 		
@@ -124,6 +124,7 @@ $returnjson['Status'] = "OK";
 $returnjson['LastID'] = $LastID;
 $returnjson['LastDate'] = date('Y-m-d H:i:s', $LastDate);
 $returnjson['Count'] = $Count;
+$returnjson['SensorCount'] = $SensorCount;
 $returnjson['Sensor'] = $query_sensor;
 $returnjson['Data'] = $DhtArray;
 

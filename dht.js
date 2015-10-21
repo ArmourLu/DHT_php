@@ -14,12 +14,12 @@ function getUrlParameter(sParam) {
 };
 function UpdateCurrentData(){
 	$.getJSON("dht_json.php?s=all&ft=1",function(dhtJSON){
-		if(dhtJSON["Status"] == "OK" && dhtJSON["Sensor"] == "all"){
-			var LastDate = dhtJSON["LastDate"];
+		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
+			var LastDate = dhtJSON.LastDate;
 			if(dhtJSON["Count"]>=1){
-				for(i=0;i<$(".block-data").length;i++){
-					t = dhtJSON["Data"][i][0].split(".");
-					h = dhtJSON["Data"][i][1].split(".");
+				for(i=0;i<$(".reading").length/2;i++){
+					t = dhtJSON.Data[i][0].split(".");
+					h = dhtJSON.Data[i][1].split(".");
 					$(".reading").eq(i*2).html(Math.floor(t[0]));
                     $(".readingdecimal").eq(i*2).html("."+Math.floor(t[1][0]));
 					$(".reading").eq(i*2+1).html(Math.floor(h[0]));
@@ -38,24 +38,9 @@ $(document).ready(function () {
     $("html").niceScroll();
     $("#alertsubmit").click(function(){
         if($("#alertemail").val()=="") return;
-        HoldOn.open({
-            theme:"sk-bounce",
-            message: "<h1> Please wait </h1>",
-            content:"",
-            backgroundColor:"black",
-            textColor:"white"
-        });
-        $("input").prop('disabled',true);
-        $("button").prop('disabled',true);
+        prepare_submit();
         $.getJSON("dht_alert.php?cmd=add&email="+$("#alertemail").val(),function(alertresult){
-            swal({title:alertresult["Status"].toUpperCase(),
-                  text:alertresult["Comment"],
-                  type:alertresult["Status"].toLowerCase()
-                 },function(){
-                    $("input").prop('disabled',false);
-                    $("button").prop('disabled',false);
-                    HoldOn.close();
-            });
+            after_submit(alertresult);
         });
     });
     $("#alertclear").click(function(){
@@ -64,9 +49,10 @@ $(document).ready(function () {
     cmd = getUrlParameter("cmd");
     key = getUrlParameter("key");
     id = getUrlParameter("id");
-    if(cmd == 'verify'){
+    if(cmd == 'verify' && key != '' && id != ''){
+        prepare_submit();
         $.getJSON("dht_alert.php?cmd=" + cmd + "&id=" + id + "&key=" + key,function(alertresult){
-            swal(alertresult["Status"].toUpperCase(), alertresult["Comment"], alertresult["Status"].toLowerCase());
+            after_submit(alertresult);
             if(history.pushState){
                 history.pushState('','',location.href.split('?')[0]);
             }
@@ -74,3 +60,24 @@ $(document).ready(function () {
     }
 
 });
+function prepare_submit(){
+    HoldOn.open({
+        theme:"sk-bounce",
+        message: "<h1> Please wait </h1>",
+        content:"",
+        backgroundColor:"black",
+        textColor:"white"
+    });
+    $("input").prop('disabled',true);
+    $("button").prop('disabled',true);
+};
+function after_submit(alertresult){
+    swal({title:alertresult.Status.toUpperCase(),
+          text:alertresult.Comment,
+          type:alertresult.Status.toLowerCase()
+         },function(){
+            $("input").prop('disabled',false);
+            $("button").prop('disabled',false);
+            HoldOn.close();
+    });
+};

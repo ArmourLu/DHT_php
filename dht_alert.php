@@ -51,7 +51,7 @@ if($cmd == "verify")
         else
         {
             $status = "error";
-            $comment = "Wrong key value. We can't verify your email address.";
+            $comment = "Wrong verification code. We can't verify your email address.";
         }
     }
 }

@@ -35,7 +35,7 @@
         text-align:  left;
         display: inline-block;
         font-size: 80px;
-        width: 85px;
+        width: 88px;
     }
 
     .readingdecimal {
@@ -43,18 +43,17 @@
         font-family: 'Roboto', sans-serif;
         text-align:  left;
         display: inline-block;
-        font-size: 50px;
-        width: 40px;
+        font-size: 40px;
+        width: 30px;
+        letter-spacing: -3px;
     }
     
     .block-data,
     .block-info,
     .block-header {
         border-radius: 6px;
-        padding: 15px;
         margin-top: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 10px;
         border: 1px;
         border-style: solid;
     }

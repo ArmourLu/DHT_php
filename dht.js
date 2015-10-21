@@ -3,10 +3,8 @@ function getUrlParameter(sParam) {
         sURLVariables = sPageURL.split('&'),
         sParameterName,
         i;
-
     for (i = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split('=');
-
         if (sParameterName[0] === sParam) {
             return sParameterName[1] === undefined ? true : sParameterName[1];
         }
@@ -20,10 +18,12 @@ function UpdateCurrentData(){
 				for(i=0;i<$(".reading").length/2;i++){
 					t = dhtJSON.Data[i][0].split(".");
 					h = dhtJSON.Data[i][1].split(".");
-					$(".reading").eq(i*2).html(Math.floor(t[0]));
-                    $(".readingdecimal").eq(i*2).html("."+Math.floor(t[1][0]));
-					$(".reading").eq(i*2+1).html(Math.floor(h[0]));
-                    $(".readingdecimal").eq(i*2+1).html("."+Math.floor(h[1][0]));
+					$(".reading").eq(i*2).html(t[0]);
+                    $(".reading").eq(i*2+1).html(h[0]);
+                    if(t.length >1) $(".readingdecimal").eq(i*2).html("."+t[1][0]);
+                    else $(".readingdecimal").eq(i*2).html(".-");
+                    if(h.length >1) $(".readingdecimal").eq(i*2+1).html("."+h[1][0]);
+                    else $(".readingdecimal").eq(i*2+1).html(".-");
 				}
 				$("#currenttime").html(LastDate);
 				}
@@ -53,12 +53,8 @@ $(document).ready(function () {
         prepare_submit();
         $.getJSON("dht_alert.php?cmd=" + cmd + "&id=" + id + "&key=" + key,function(alertresult){
             after_submit(alertresult);
-            if(history.pushState){
-                history.pushState('','',location.href.split('?')[0]);
-            }
         });
     }
-
 });
 function prepare_submit(){
     HoldOn.open({
@@ -80,4 +76,7 @@ function after_submit(alertresult){
             $("button").prop('disabled',false);
             HoldOn.close();
     });
+    if(history.pushState){
+        history.pushState('','',location.href.split('?')[0]);
+    }
 };

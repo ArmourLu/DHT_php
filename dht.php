@@ -47,29 +47,28 @@ $sensor_num = (int)$row[0];
         </div>
         <div class="headertext text-center"><?=$str_ServiceName?></div>
 <? for($i=0;$i < $sensor_num;$i++){ ?>
-            <div class="block-data text-center infotext">
-                <span class="reading"></span><span class="readingdecimal"></span>
-                <span>&deg;C</span>
-                <span>&nbsp;&nbsp;</span>
-                <span class="reading"></span><span class="readingdecimal"></span>
-                <span>%</span>
-            </div>
+        <div class="block-data text-center infotext">
+            <span class="reading"></span><span class="readingdecimal"></span>
+            <span>&deg;C</span>
+            <span>&nbsp;&nbsp;</span>
+            <span class="reading"></span><span class="readingdecimal"></span>
+            <span>%</span>
+        </div>
 <? }; ?>
-            <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
-            <div id="alterme" class="block-info">
-                <div class="row">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4">
-                        <input id="alertemail" type="email" class="form-control input-lg" id="email" placeholder="Email Address">
-                    </div>
-                    <div class="col-lg-4">
-                        <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>
-                        <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
-                    </div>
+        <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
+        <div id="alterme" class="block-info">
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <input id="alertemail" type="email" class="form-control input-lg" id="email" placeholder="Email Address">
+                </div>
+                <div class="col-lg-4">
+                    <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>
+                    <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
                 </div>
             </div>
-            <br>
+        </div>
+        <br>
     </div>
 </body>
-
 </html>

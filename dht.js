@@ -15,9 +15,9 @@ function UpdateCurrentData(){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
 			var LastDate = dhtJSON.LastDate;
 			if(dhtJSON["Count"]>=1){
-				for(i=0;i<$(".reading").length/2;i++){
-					t = dhtJSON.Data[i][0].toString().split(".");
-					h = dhtJSON.Data[i][1].toString().split(".");
+				for(i=0;i<$(".reading").length/2&&i<dhtJSON.SensorCount;i++){
+					t = dhtJSON.Data[0][i][0].toString().split(".");
+					h = dhtJSON.Data[0][i][1].toString().split(".");
 					$(".reading").eq(i*2).html(t[0].length>1?t[0]:"0"+t[0]);
                     $(".reading").eq(i*2+1).html(h[0].length>1?h[0]:"0"+h[0]);
                     $(".readingdecimal").eq(i*2).html(t.length>1?"."+t[1][0]:".0");

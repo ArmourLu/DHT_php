@@ -52,7 +52,7 @@ $query_end_datetime = $_GET['ed'];
 if (date('Y-m-d H:i:s', strtotime($query_end_datetime)) != $query_end_datetime) $query_end_datetime="";
 else $query_count = $max_query_count;
 
-$query_fields = "ID, Reading, UNIX_TIMESTAMP(DateTime)";
+$query_fields = "ID, replace(replace(replace(replace(Reading,'C,H:',','),'%,T:',','),'T:',''),'%,',''), UNIX_TIMESTAMP(DateTime)";
 
 // Query by datetime
 if($query_from_datetime != "" && $query_end_datetime !=""){
@@ -80,7 +80,7 @@ else{
 
 //Execute SQL
 $result = mysql_query($sqlstr);
-//$returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
+$returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
 $DhtArray = array();
 
 // Loop for fetching date from mysql
@@ -90,26 +90,21 @@ $PreDate = 0;
 $CurrDate = 0;
 $MissCount = 0;
 $rowindex = 0;
-if($query_ft == 0)
-{
-    $t_pattern = "/T:([-\d]*)(\.\d*)?C/U";
-    $h_pattern = "/H:([-\d]*)(\.\d*)?%/U";
-}
-else
-{
-    $t_pattern = "/T:(.*)C/U";
-    $h_pattern = "/H:(.*)%/U";
-}
+$DhtArrayCount = 0;
+
 while ($row = mysql_fetch_array($result)) {
-    if(count($DhtArray) == 0)
+    $readings = explode(',',$row[1]);
+    $readings_count = count($readings)/2;
+    
+    if($DhtArrayCount == 0)
     {
         $LastID = (int)$row[0];
         $LastDate = $row[2];
     }
-	if(count($DhtArray)>=$query_count) break;
+	if($DhtArrayCount>=$query_count) break;
     $rowindex++;
 
-    if(count($DhtArray)>0 && $PreDate > $row[2]+1 )
+    if($DhtArrayCount>0 && $PreDate > $row[2]+1 )
     {
         $MissingSecond = $PreDate - ($row[2]+1);
         $MissCount += $MissingSecond;
@@ -121,40 +116,39 @@ while ($row = mysql_fetch_array($result)) {
 	if(is_numeric($query_sensor)){
         $tmpArray = array();
 		// Get temperature
-		if(preg_match_all($t_pattern,$row[1],$t)){
-			if(count($t[1])<$query_sensor+1) $row_array[0] = 0;
-			else $row_array[0] = (float)$t[1][$query_sensor];
-		}else{
-			$row_array[0] = 0;
-		}
-		// Get humidity
-		if(preg_match_all($h_pattern,$row[1],$h)){
-			if(count($h[1])<$query_sensor+1) $row_array[1] = 0;
-			else $row_array[1] = (float)$h[1][$query_sensor];
-		}else{
-			$row_array[1] = 0;
-		}
+        if($readings_count < $query_sensor+1)
+        {
+            $row_array[0] = 0;
+            $row_array[1] = 0;
+        }
+        else
+        {
+            $row_array[0] = (float)$readings[$query_sensor*2];
+            $row_array[1] = (float)$readings[$query_sensor*2+1];
+        }
         $tmpArray[0] = [$row_array[0],$row_array[1]];
 	}
 	else
 	{
         $tmpArray = array();
-		preg_match_all($t_pattern,$row[1],$t);
-		preg_match_all($h_pattern,$row[1],$h);
-		foreach($t[1] as $key => $valus){
-			$row_array[0] = (float)$t[1][$key];
-			$row_array[1] = (float)$h[1][$key];
-            $tmpArray[$key] = [$row_array[0],$row_array[1]];
+		for($i=0 ; $i < $readings_count ; $i++){
+			$row_array[0] = (float)$readings[$i*2];
+			$row_array[1] = (float)$readings[$i*2+1];
+            $tmpArray[$i] = [$row_array[0],$row_array[1]];
 		}
 	}
     
-    $DhtArray[count($DhtArray)] = $tmpArray;
+    $DhtArray[$DhtArrayCount] = $tmpArray;
+    $DhtArrayCount ++;
     
-    for($i=0;$i<$MissingSecond && count($DhtArray) < $query_count;$i++)
+    for($i=0;($i<$MissingSecond)&&($DhtArrayCount < $query_count);$i++)
     {
-        $DhtArray[count($DhtArray)] = $tmpArray;
+        $DhtArray[$DhtArrayCount] = $tmpArray;
+        $DhtArrayCount++;
     }
 }
+
+$returnjson['TotalTime'] = number_format((microtime(true) - $start), 2) . "s";
 $returnjson['Status'] = "OK";
 $returnjson['LastID'] = $LastID;
 $returnjson['LastDate'] = date("Y-m-d H:i:s",$LastDate);
@@ -164,7 +158,6 @@ $returnjson['Group'] = $query_group;
 $returnjson['Sensor'] = $query_sensor;
 //$returnjson['MissCount'] = $MissCount;
 //$returnjson['rowindex'] = $rowindex;
-//$returnjson['TotalTime'] = number_format((microtime(true) - $start), 2) . "s";
 $returnjson['Data'] = $DhtArray;
 echo json_encode($returnjson);
 

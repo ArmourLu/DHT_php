@@ -78,3 +78,25 @@
         vertical-align: middle;
         float: none;
     }
+
+    #chartdiv {
+        #chartdiv {
+            width: 100%;
+            height: 500px;
+            font-size: 11px;
+        }
+        width: 100%;
+        height: 500px;
+    }
+
+    .loadinggif:before {
+        content: ' ';
+        display: inline-block;
+        vertical-align: middle;
+        height: 500px;
+    }
+
+    .loadinggif img {
+        vertical-align: middle;
+        display: inline-block;
+    }

@@ -33,6 +33,12 @@ $sensor_num = (int)$row[0];
     <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
     <script src="/HoldOn.js/js/HoldOn.js"></script>
     <script src="dht.js"></script>
+    <link type="text/css" href="/amcharts/plugins/export/export.css" rel="stylesheet">
+    <script src="/amcharts/amcharts.js"></script>
+    <script src="/amcharts/serial.js"></script>
+    <script src="/amcharts/themes/light.js"></script>
+    <script src="/amcharts/plugins/export/export.js"></script>
+    <script src="dht_chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -68,6 +74,15 @@ $sensor_num = (int)$row[0];
             </div>
         </div>
         <br>
+        <div class="headertext text-center">Graph</div>
+        <div class="block-data text-center">
+            <div id="chartdiv"></div>
+            <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
+            </br>
+            <button id="graphreload" class="btn btn-primary btn-lg">Update Graph</button>
+            </br></br>
+        </div>
     </div>
+    </br></br>
 </body>
 </html>

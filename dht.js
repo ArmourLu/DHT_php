@@ -29,8 +29,41 @@ function UpdateCurrentData(){
 		}
 	);
 };
+function UpdateChart(){
+    $("#graphreload").prop("disabled",true);
+    $(".loadinggif").show();
+    $("#chartdiv").hide();
+	$.getJSON("dht_json.php?c=86400&g=6&s=all&ft=1&i=60",function(dhtJSON){
+		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
+			var LastDate = new Date(dhtJSON.LastDate);
+            var interval = dhtJSON.Interval;
+            chartData = [];
+			if(dhtJSON["Count"]>=1){
+				for(i=dhtJSON.Count-1;i>=0;i--){
+                    var newDate = new Date(LastDate);
+                    newDate.setSeconds(newDate.getSeconds() - i * interval);
+                    chartData.push({
+                        date: newDate,
+                        t0: dhtJSON.Data[i][0][0],
+                        t1: dhtJSON.Data[i][1][0],
+                        t2: dhtJSON.Data[i][2][0],
+                        h0: dhtJSON.Data[i][0][1],
+                        h1: dhtJSON.Data[i][1][1],
+                        h2: dhtJSON.Data[i][2][1]
+                    });
+				}
+                make_chart();
+				}
+			}
+        $(".loadinggif").hide();
+        $("#chartdiv").show();
+        $("#graphreload").prop("disabled",false);
+		}
+	);
+};
 $(document).ready(function () {
     UpdateCurrentData();
+    UpdateChart();
     setInterval(UpdateCurrentData,1000);
     $( document ).tooltip({track: true});
     $("html").niceScroll();
@@ -53,6 +86,9 @@ $(document).ready(function () {
             after_submit(alertresult);
         });
     }
+    $("#graphreload").click(function(){
+        UpdateChart();
+    });
 });
 function prepare_submit(){
     HoldOn.open({

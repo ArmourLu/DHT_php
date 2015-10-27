@@ -4,27 +4,20 @@ include "/var/www_private/mysql_conn.php";
 $start = microtime(true);
 
 $max_query_count = 60 * 60 * 24; // 1 day
-$query_interval = 1;
 
 //Get count
 $query_count = $_GET['c'];
 if($query_count=='' || !is_numeric($query_count)) $query_count=1;
 if($query_count>$max_query_count) $query_count = $max_query_count;
 
-//Get group
-$query_group = $_GET['g'];
-if($query_group=='' || !is_numeric($query_group))
-{
-    $sqlstr = "SELECT ID FROM dht_group order by ID desc limit 0,1";
-    $result = mysql_query($sqlstr);
-    $row = mysql_fetch_row($result);
-    $query_group = $row[0];
-}
-
 //Get float format
 $query_ft = $_GET['ft'];
 if($query_ft=='' || !is_numeric($query_ft)) $query_ft=0;
 if($ft > 1) $ft = 1;
+
+//Get interval
+$query_interval = $_GET['i'];
+if($query_interval=='' || !is_numeric($query_interval)) $query_interval=1;
 
 //Get sensor#
 $query_sensor = $_GET['s'];
@@ -37,39 +30,55 @@ else
 	if($query_sensor=='' || !is_numeric($query_sensor)) $query_sensor=0;
 }
 
-//Get end date
-$query_end_datetime = $_GET['ed'];
+//Get from date
+$query_from_datetime = $_GET['f'];
 
-if (date('Y-m-d H:i:s', strtotime($query_end_datetime))!= $query_end_datetime)
+if (date('Y-m-d H:i:s', strtotime($query_from_datetime))!= $query_from_datetime)
 {
-    $query_end_datetime="";
+    $query_from_datetime="";
 }
 else
 {
-    $query_from_datetime = date("Y-m-d H:i:s",strtotime($query_end_datetime) - $query_count + 1);
+    $query_end_datetime = date("Y-m-d H:i:s",strtotime($query_from_datetime) + $query_count - 1);
     
-    $sqlstr = "select ID from dht where datetime <= '$query_end_datetime' and GroupID=$query_group order by id desc limit 0,1";
+    $sqlstr = "select ID from dht where datetime <= '$query_end_datetime' order by id desc limit 0,1";
     $result = mysql_query($sqlstr);
     $row = mysql_fetch_row($result);
     $query_end = $row[0];
     
-    $sqlstr = "select ID from dht where datetime >= '$query_from_datetime' and GroupID=$query_group order by id limit 0,1";
+    $sqlstr = "select ID from dht where datetime >= '$query_from_datetime' order by id limit 0,1";
     $result = mysql_query($sqlstr);
     $row = mysql_fetch_row($result);
     $query_from = $row[0];
 }
 
-$query_fields = "ID, Reading, UNIX_TIMESTAMP(DateTime)";
+$query_fields = "ID, Reading, UNIX_TIMESTAMP(DateTime), GroupID";
 
 // Query by datetime
 if($query_end_datetime != ""){
-	$sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from and GroupID=$query_group order by id desc";
+    if($query_interval==1)
+    {
+	   $sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from order by id desc";
+    }
+    else
+    {
+        $sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from and UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc";
+    }
 }
 else{
-	$sqlstr = "select $query_fields from dht where GroupID=$query_group order by id desc limit 0,$query_count";
+    if($query_interval==1)
+    {
+	   $sqlstr = "select $query_fields from dht order by id desc limit 0,$query_count";
+    }
+    else
+    {
+        $query_count = $query_count / $query_interval;
+        $sqlstr = "select $query_fields from dht where UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc limit 0,$query_count";
+    }
 }
 
 //Execute SQL
+//$returnjson['SQL'] = $sqlstr;
 $result = mysql_query($sqlstr);
 $returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
 $DhtArray = array();
@@ -81,30 +90,31 @@ $DhtArrayCount = 0;
 $rowindex = 0;
 
 $PreDate = 0;
+$PreGroup = 0;
 $MissCount = 0;
 $rowindex = 0;
 
 $start = microtime(true);
-while ($row = mysql_fetch_row($result)) {
+while ($row = mysql_fetch_assoc($result)) {
 	if($DhtArrayCount>=$query_count) break;
+    if($PreDate==$row['UNIX_TIMESTAMP(DateTime)']) continue;
     $rowindex++;
 
-    $readings = explode(',',$row[1]);
+    $readings = explode(',',$row['Reading']);
 
     if($DhtArrayCount == 0)
     {
         $readings_count = count($readings)/2;
-        $LastID = (int)$row[0];
-        $LastDate = $row[2];
+        $LastID = (int)$row['ID'];
+        $LastDate = $row['UNIX_TIMESTAMP(DateTime)'];
     }
 
-    if($DhtArrayCount>0 && $PreDate > $row[2]+1 )
+    if($DhtArrayCount>0 && $PreDate > $row['UNIX_TIMESTAMP(DateTime)']+$query_interval )
     {
-        $MissingSecond = $PreDate - ($row[2]+1);
+        $MissingSecond = ($PreDate - ($row['UNIX_TIMESTAMP(DateTime)']+$query_interval))/$query_interval;
         $MissCount += $MissingSecond;
     }
     else $MissingSecond=0;
-    $PreDate = $row[2];
 
 	if(is_numeric($query_sensor)){
         $tmpArray = array();
@@ -124,15 +134,30 @@ while ($row = mysql_fetch_row($result)) {
             $tmpArray[$i] = [(float)$readings[$i*2],(float)$readings[$i*2+1]];
 		}
 	}
-    
+
+    if($MissingSecond>0)
+    {
+        $pendingArray = $tmpArray;
+        
+        if($PreGroup != $row['GroupID'])
+        {
+            foreach($pendingArray as $key => $value)
+            {
+                $pendingArray[$key] = [0,0];
+            }
+        }
+        for($i=0;($i<$MissingSecond)&&($DhtArrayCount < $query_count);$i++)
+        {
+            $DhtArray[$DhtArrayCount] = $pendingArray;
+            $DhtArrayCount++;
+        }
+    }
+
     $DhtArray[$DhtArrayCount] = $tmpArray;
     $DhtArrayCount++;
 
-    for($i=0;($i<$MissingSecond)&&($DhtArrayCount < $query_count);$i++)
-    {
-        $DhtArray[$DhtArrayCount] = $tmpArray;
-        $DhtArrayCount++;
-    }
+    $PreDate = $row['UNIX_TIMESTAMP(DateTime)'];
+    $PreGroup = $row['GroupID'];
 }
 
 $returnjson['ParseTime'] = number_format((microtime(true) - $start), 2) . "s";
@@ -140,8 +165,9 @@ $returnjson['Status'] = "OK";
 $returnjson['LastID'] = $LastID;
 $returnjson['LastDate'] = date("Y-m-d H:i:s",$LastDate);
 $returnjson['Count'] = count($DhtArray);
+$returnjson['Interval'] = (int)$query_interval;
 $returnjson['SensorCount'] = count($DhtArray[0]);
-$returnjson['Group'] = $query_group;
+//$returnjson['Group'] = $query_group;
 $returnjson['Sensor'] = $query_sensor;
 $returnjson['MissCount'] = $MissCount;
 $returnjson['Data'] = $DhtArray;

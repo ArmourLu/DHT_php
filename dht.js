@@ -35,7 +35,7 @@ function UpdateChart(){
     $("#chartdiv").hide();
 	$.getJSON("dht_json.php?c=86400&g=6&s=all&ft=1&i=60",function(dhtJSON){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
-			var LastDate = new Date(dhtJSON.LastDate);
+			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'Z');
             var interval = dhtJSON.Interval;
             chartData = [];
 			if(dhtJSON["Count"]>=1){

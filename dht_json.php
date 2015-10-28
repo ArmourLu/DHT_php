@@ -46,16 +46,17 @@ if (date('Y-m-d H:i:s', strtotime($query_from_datetime))!= $query_from_datetime)
 else
 {
     $query_end_datetime = date("Y-m-d H:i:s",strtotime($query_from_datetime) + $query_count - 1);
-    
+    /*
     $sqlstr = "select ID from dht where datetime <= '$query_end_datetime' order by id desc limit 0,1";
     $result = mysql_query($sqlstr);
     $row = mysql_fetch_row($result);
     $query_end = $row[0];
     
-    $sqlstr = "select ID from dht where datetime >= '$query_from_datetime' order by id limit 0,1";
+    $sqlstr = "select ID from dht where datetime >= '$query_from_datetime' limit 0,1";
     $result = mysql_query($sqlstr);
     $row = mysql_fetch_row($result);
     $query_from = $row[0];
+    */
 }
 
 $query_fields = "ID, Reading, UNIX_TIMESTAMP(DateTime), GroupID";
@@ -64,11 +65,13 @@ $query_fields = "ID, Reading, UNIX_TIMESTAMP(DateTime), GroupID";
 if($query_end_datetime != ""){
     if($query_interval==1)
     {
-	   $sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from order by id desc";
+	   //$sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from order by id desc";
+       $sqlstr = "select $query_fields from dht where datetime <= '$query_end_datetime' and  datetime >= '$query_from_datetime' order by id desc";
     }
     else
     {
-        $sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from and UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc";
+        //$sqlstr = "select $query_fields from dht where id <= $query_end and id >= $query_from and UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc";
+        $sqlstr = "select $query_fields from dht where datetime <= '$query_end_datetime' and  datetime >= '$query_from_datetime' and UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc";
     }
 }
 else{
@@ -82,7 +85,8 @@ else{
         $sqlstr = "select $query_fields from dht where UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc limit 0,$query_count";
     }
 }
-
+$returnjson['PrepareTime'] = number_format((microtime(true) - $start), 2) . "s";
+$start = microtime(true);
 //Execute SQL
 //$returnjson['SQL'] = $sqlstr;
 $result = mysql_query($sqlstr);

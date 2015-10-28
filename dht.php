@@ -63,22 +63,22 @@ $sensor_num = (int)$row[0];
         </div>
 <? }; ?>
         <div class="headertext text-center">Graph</div>
-        <div class="block-data text-center">
+        <div class="block-info text-center">
             <div id="chartdiv"></div>
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
             </br>
             <div class="row">
-               <div class="col-lg-3"></div>
-               <div class="col-lg-2">
-                <button id="lastdaygraph" class="btn btn-primary btn-lg">Show Last 24 hrs</button>
-               </div>
-               <div class="col-lg-2 infotext">OR</div>
-               <div class="col-lg-2">
-                <input id="graphdate" type="text" class="form-control input-lg">
-               </div>
-               <div class="col-lg-1">
-                <button id="updategraph" class="btn btn-primary btn-lg">Show</button>
-               </div>
+                <div class="col-lg-3"></div>
+                <div class="col-lg-2">
+                    <button id="lastdaygraph" class="btn btn-primary btn-lg">Show Last 24 hrs</button>
+                </div>
+                <div class="col-lg-2 infotext">OR</div>
+                <div class="col-lg-2">
+                    <input id="graphdate" type="text" class="form-control input-lg">
+                </div>
+                <div class="col-lg-1">
+                    <button id="updategraph" class="btn btn-primary btn-lg">Show</button>
+                </div>
             </div>
         </div>
         <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>

@@ -3,7 +3,7 @@ include "/var/www_private/mysql_conn.php";
 
 $start = microtime(true);
 
-$max_query_count = 60 * 60 * 24; // 1 day
+$max_query_count = 60 * 60 * 24 * 7; // 7 days
 
 //Get count
 $query_count = $_GET['c'];
@@ -32,6 +32,12 @@ else
 
 //Get from date
 $query_from_datetime = $_GET['f'];
+
+//Get sensor number
+$sqlstr = "SELECT Value FROM sysinfo where Name='SensorCount'";
+$result = mysql_query($sqlstr);
+$row = mysql_fetch_row($result);
+$sensor_num = (int)$row[0];
 
 if (date('Y-m-d H:i:s', strtotime($query_from_datetime))!= $query_from_datetime)
 {
@@ -98,9 +104,10 @@ $start = microtime(true);
 while ($row = mysql_fetch_assoc($result)) {
 	if($DhtArrayCount>=$query_count) break;
     if($PreDate==$row['UNIX_TIMESTAMP(DateTime)']) continue;
-    $rowindex++;
-
+    
     $readings = explode(',',$row['Reading']);
+    if(count($readings) != $sensor_num*2) continue;
+    $rowindex++;
 
     if($DhtArrayCount == 0)
     {

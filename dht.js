@@ -29,35 +29,42 @@ function UpdateCurrentData(){
 		}
 	);
 };
-function UpdateChart(){
-    $("#graphreload").prop("disabled",true);
+function UpdateChart(graphdate){
+    if(graphdate != '') graphdate = graphdate + " 00:00:00";
+    $("#lastdaygraph").prop("disabled",true);
+    $("#updategraph").prop("disabled",true);
+    $("#graphdate").prop("disabled",true);
     $(".loadinggif").show();
     $("#chartdiv").hide();
-	$.getJSON("dht_json.php?c=86400&g=6&s=all&ft=1&i=60",function(dhtJSON){
+	$.getJSON("dht_json.php?c=86400&g=6&s=all&ft=1&i=60&f="+graphdate,function(dhtJSON){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
-			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'Z');
+			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
             var interval = dhtJSON.Interval;
             chartData = [];
 			if(dhtJSON["Count"]>=1){
 				for(i=dhtJSON.Count-1;i>=0;i--){
                     var newDate = new Date(LastDate);
                     newDate.setSeconds(newDate.getSeconds() - i * interval);
-                    chartData.push({
-                        date: newDate,
-                        t0: dhtJSON.Data[i][0][0],
-                        t1: dhtJSON.Data[i][1][0],
-                        t2: dhtJSON.Data[i][2][0],
-                        h0: dhtJSON.Data[i][0][1],
-                        h1: dhtJSON.Data[i][1][1],
-                        h2: dhtJSON.Data[i][2][1]
-                    });
+                    var tmpchartData = {};
+                    tmpchartData["date"] = newDate;
+                    for(x=0;x<dhtJSON.SensorCount;x++){
+                        tmpchartData["t"+x.toString()] = dhtJSON.Data[i][x][0];
+                        tmpchartData["h"+x.toString()] = dhtJSON.Data[i][x][1];
+                    }
+                    chartData.push(tmpchartData);
 				}
                 make_chart();
 				}
+            else
+            {
+                $("#chartdiv").html("No Date");
+            }
 			}
         $(".loadinggif").hide();
         $("#chartdiv").show();
-        $("#graphreload").prop("disabled",false);
+        $("#lastdaygraph").prop("disabled",false);
+        $("#updategraph").prop("disabled",false);
+        $("#graphdate").prop("disabled",false);
 		}
 	);
 };
@@ -86,8 +93,19 @@ $(document).ready(function () {
             after_submit(alertresult);
         });
     }
-    $("#graphreload").click(function(){
+    $("#lastdaygraph").click(function(){
         UpdateChart();
+    });
+    $('#graphdate').datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayHighlight: true
+    });
+    $("#updategraph").click(function(){
+        if($("#graphdate").val()!='')
+        {
+            UpdateChart($("#graphdate").val());
+        }
     });
 });
 function prepare_submit(){

@@ -25,6 +25,7 @@ $sensor_num = (int)$row[0];
     <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/ui/jquery-ui-themes-1.11.4/themes/start/jquery-ui.css">
     <link rel="stylesheet" href="/HoldOn.js/css/HoldOn.css">
+    <link href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <script src="/js/jquery.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/ui/jquery-ui-1.11.4/jquery-ui.js"></script>
@@ -38,6 +39,7 @@ $sensor_num = (int)$row[0];
     <script src="/amcharts/serial.js"></script>
     <script src="/amcharts/themes/light.js"></script>
     <script src="/amcharts/plugins/export/export.js"></script>
+    <script src="/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="dht_chart.js"></script>
 </head>
 <body>
@@ -60,6 +62,25 @@ $sensor_num = (int)$row[0];
             <span>%</span>
         </div>
 <? }; ?>
+        <div class="headertext text-center">Graph</div>
+        <div class="block-data text-center">
+            <div id="chartdiv"></div>
+            <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
+            </br>
+            <div class="row">
+               <div class="col-lg-3"></div>
+               <div class="col-lg-2">
+                <button id="lastdaygraph" class="btn btn-primary btn-lg">Show Last 24 hrs</button>
+               </div>
+               <div class="col-lg-2 infotext">OR</div>
+               <div class="col-lg-2">
+                <input id="graphdate" type="text" class="form-control input-lg">
+               </div>
+               <div class="col-lg-1">
+                <button id="updategraph" class="btn btn-primary btn-lg">Show</button>
+               </div>
+            </div>
+        </div>
         <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
         <div id="alterme" class="block-info">
             <div class="row">
@@ -73,15 +94,7 @@ $sensor_num = (int)$row[0];
                 </div>
             </div>
         </div>
-        <br>
-        <div class="headertext text-center">Graph</div>
-        <div class="block-data text-center">
-            <div id="chartdiv"></div>
-            <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
-            </br>
-            <button id="graphreload" class="btn btn-primary btn-lg">Update Graph</button>
-            </br></br>
-        </div>
+        <div class="headertext text-center"></div>
     </div>
     </br></br>
 </body>

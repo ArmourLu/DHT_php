@@ -12,6 +12,10 @@ var periodformat = [{period:'fff',format:'JJ:NN:SS'},
 
 function make_chart(){
     chart = AmCharts.makeChart("chartdiv", {
+        "balloon": {
+            "borderThickness": 1,
+            "shadowAlpha": 0
+        },
         "type": "serial",
         "theme": "light",
         "legend": {
@@ -46,7 +50,7 @@ function make_chart(){
             "balloonFunction": formatTempgraphs,
             "valueAxis": "v1",
             "lineColor": "#FF6600",
-            //"bullet": "round",
+            "bullet": "round",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "T0",
@@ -57,7 +61,7 @@ function make_chart(){
             "balloonFunction": formatTempgraphs,
             "valueAxis": "v1",
             "lineColor": "#FCD202",
-            //"bullet": "square",
+            "bullet": "square",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "T1",
@@ -68,7 +72,7 @@ function make_chart(){
             "balloonFunction": formatTempgraphs,
             "valueAxis": "v1",
             "lineColor": "#ce4141",
-            //"bullet": "triangleUp",
+            "bullet": "triangleUp",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "T2",
@@ -79,7 +83,7 @@ function make_chart(){
             "balloonFunction": formatHumigraphs,
             "valueAxis": "v2",
             "lineColor": "#5287ff",
-            //"bullet": "round",
+            "bullet": "round",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "H0",
@@ -90,7 +94,7 @@ function make_chart(){
             "balloonFunction": formatHumigraphs,
             "valueAxis": "v2",
             "lineColor": "#b04af0",
-            //"bullet": "square",
+            "bullet": "square",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "H1",
@@ -101,7 +105,7 @@ function make_chart(){
             "balloonFunction": formatHumigraphs,
             "valueAxis": "v2",
             "lineColor": "#00eb3f",
-            //"bullet": "triangleUp",
+            "bullet": "triangleUp",
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "H2",
@@ -127,7 +131,7 @@ function make_chart(){
          }
     });
 
-    chart.addListener("dataUpdated", zoomChart);
+    //chart.addListener("dataUpdated", zoomChart);
     //zoomChart();
     chart.zoomOut();
 }

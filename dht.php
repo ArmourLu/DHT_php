@@ -63,23 +63,39 @@ $sensor_num = (int)$row[0];
         </div>
 <? }; ?>
         <div class="headertext text-center">Graph</div>
-        <div class="block-info text-center">
+        <div id="graph" class="block-info text-center">
             <div id="chartdiv"></div>
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
             </br>
             <div class="row">
-                <div class="col-lg-3"></div>
-                <div class="col-lg-2">
-                    <button id="lastdaygraph" class="btn btn-primary btn-lg">Show Last 24 hrs</button>
+                <div class="col-lg-4">
+                    <button id="onedaygraph" class="btn btn-primary btn-lg btn-block">Show Last 24 hrs</button>
                 </div>
-                <div class="col-lg-2 infotext">OR</div>
-                <div class="col-lg-2">
-                    <input id="graphdate" type="text" class="form-control input-lg">
+                <div class="col-lg-4">
+                    <button id="twodaygraph" class="btn btn-primary btn-lg btn-block">Show Last 48 hrs</button>
                 </div>
-                <div class="col-lg-1">
-                    <button id="updategraph" class="btn btn-primary btn-lg">Show</button>
+                <div class="col-lg-4">
+                    <button id="threedaygraph" class="btn btn-primary btn-lg btn-block">Show Last 72 hrs</button>
                 </div>
             </div>
+            </br>
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4 infotext">Or Select a day to show</div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3">
+                    <div class="input-group date">
+                        <input id="graphdate" type="text" class="form-control input-lg" data-date-end-date="0d"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <button id="updategraph" class="btn btn-primary btn-lg btn-block">Show</button>
+                </div>
+            </div>
+            <br/>
         </div>
         <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
         <div id="alterme" class="block-info">

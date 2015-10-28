@@ -29,14 +29,12 @@ function UpdateCurrentData(){
 		}
 	);
 };
-function UpdateChart(graphdate){
+function UpdateChart(graphdate,period,interval){
     if(graphdate != '') graphdate = graphdate + " 00:00:00";
-    $("#lastdaygraph").prop("disabled",true);
-    $("#updategraph").prop("disabled",true);
-    $("#graphdate").prop("disabled",true);
+    $("#graph :input").prop("disabled",true);
     $(".loadinggif").show();
     $("#chartdiv").hide();
-	$.getJSON("dht_json.php?c=86400&g=6&s=all&ft=1&i=60&f="+graphdate,function(dhtJSON){
+	$.getJSON("dht_json.php?c="+period+"&s=all&ft=1&i="+interval+"&f="+graphdate,function(dhtJSON){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
 			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
             var interval = dhtJSON.Interval;
@@ -62,15 +60,13 @@ function UpdateChart(graphdate){
 			}
         $(".loadinggif").hide();
         $("#chartdiv").show();
-        $("#lastdaygraph").prop("disabled",false);
-        $("#updategraph").prop("disabled",false);
-        $("#graphdate").prop("disabled",false);
+        $("#graph :input").prop("disabled",false);
 		}
 	);
 };
 $(document).ready(function () {
     UpdateCurrentData();
-    UpdateChart();
+    UpdateChart("",86400,60);
     setInterval(UpdateCurrentData,1000);
     $( document ).tooltip({track: true});
     $("html").niceScroll();
@@ -93,8 +89,14 @@ $(document).ready(function () {
             after_submit(alertresult);
         });
     }
-    $("#lastdaygraph").click(function(){
-        UpdateChart();
+    $("#onedaygraph").click(function(){
+        UpdateChart("",86400,60);
+    });
+    $("#twodaygraph").click(function(){
+        UpdateChart("",86400*2,60);
+    });
+    $("#threedaygraph").click(function(){
+        UpdateChart("",86400*3,60);
     });
     $('#graphdate').datepicker({
         format: "yyyy-mm-dd",
@@ -104,7 +106,7 @@ $(document).ready(function () {
     $("#updategraph").click(function(){
         if($("#graphdate").val()!='')
         {
-            UpdateChart($("#graphdate").val());
+            UpdateChart($("#graphdate").val(),86400,60);
         }
     });
 });
@@ -116,16 +118,14 @@ function prepare_submit(){
         backgroundColor:"black",
         textColor:"white"
     });
-    $("input").prop('disabled',true);
-    $("button").prop('disabled',true);
+    $("#alterme :input").prop('disabled',true);
 };
 function after_submit(alertresult){
     swal({title:alertresult.Status.toUpperCase(),
           text:alertresult.Comment,
           type:alertresult.Status.toLowerCase()
          },function(){
-            $("input").prop('disabled',false);
-            $("button").prop('disabled',false);
+            $("#alterme :input").prop('disabled',false);
             HoldOn.close();
     });
     if(history.pushState){

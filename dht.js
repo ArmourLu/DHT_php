@@ -83,7 +83,7 @@ $(document).ready(function () {
     cmd = getUrlParameter("cmd");
     key = getUrlParameter("key");
     id = getUrlParameter("id");
-    if(cmd == 'verify' && key != '' && id != ''){
+    if(cmd != undefined && key != undefined && id != undefined){
         prepare_submit();
         $.getJSON("dht_alert.php?cmd=" + cmd + "&id=" + id + "&key=" + key,function(alertresult){
             after_submit(alertresult);

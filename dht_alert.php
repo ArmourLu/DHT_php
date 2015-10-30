@@ -46,12 +46,47 @@ if($cmd == "verify")
                 $curtime = date("Y-m-d H:i:s");
                 $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime', hash='$hash' where ID='$id'";
                 $result = mysql_query($sqlstr);
+                exec("python $PythonPath mail $email remove",$output);
             }
         }
         else
         {
             $status = "error";
             $comment = "Wrong verification code. We can't verify your email address.";
+        }
+    }
+}
+elseif($cmd == "remove")
+{
+    if (!is_numeric($id)) {
+      $status = "error";
+      $comment = "Invalid ID.";
+    }
+    else
+    {
+        $sqlstr = "select hash, Enabled from useralert where ID='$id'";
+        $result = mysql_query($sqlstr);
+        $row = mysql_fetch_array($result);
+        $hash = $row['hash'];
+        $Enabled = $row['Enabled'];
+        if($hash == $key)
+        {
+            if($Enabled == true)
+            {
+                $status = "success";
+                $comment = "Your alert had been removed.";
+                $sqlstr = "delete from useralert where ID='$id'";
+                $result = mysql_query($sqlstr);
+            }else
+            {
+                $status = "error";
+                $comment = "Your alert is not activated.";
+            }
+        }
+        else
+        {
+            $status = "error";
+            $comment = "Wrong verification code. We can't remove your email address.";
         }
     }
 }

@@ -27,9 +27,10 @@ if($cmd == "verify")
     }
     else
     {
-        $sqlstr = "select hash, Enabled from useralert where ID='$id'";
+        $sqlstr = "select Email, hash, Enabled from useralert where ID='$id'";
         $result = mysql_query($sqlstr);
         $row = mysql_fetch_array($result);
+        $email = $row['Email'];
         $hash = $row['hash'];
         $Enabled = $row['Enabled'];
         if($hash == $key)

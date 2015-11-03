@@ -89,7 +89,7 @@
         height: 500px;
     }
 
-    .loadinggif:before {
+    .loadinggif:before{
         content: ' ';
         display: inline-block;
         vertical-align: middle;
@@ -99,4 +99,14 @@
     .loadinggif img {
         vertical-align: middle;
         display: inline-block;
+    }
+
+    .nodata {
+        width: 100%;
+        height: 500px;
+        line-height: 500px;
+        vertical-align: middle;
+        font-family: 'Roboto', sans-serif;
+        font-size: 36px;
+        color: #666666;
     }

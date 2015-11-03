@@ -66,16 +66,17 @@ $sensor_num = (int)$row[0];
         <div id="graph" class="block-info text-center">
             <div id="chartdiv"></div>
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
+            <div class="nodata">NO DATA</div>
             </br>
             <div class="row">
                 <div class="col-lg-4">
-                    <button id="onedaygraph" class="btn btn-primary btn-lg btn-block">Show Last 24 hrs</button>
+                    <button id="onedaygraph" class="btn btn-lg btn-block">Show Last 24 hrs</button>
                 </div>
                 <div class="col-lg-4">
-                    <button id="twodaygraph" class="btn btn-primary btn-lg btn-block">Show Last 48 hrs</button>
+                    <button id="twodaygraph" class="btn btn-lg btn-block">Show Last 48 hrs</button>
                 </div>
                 <div class="col-lg-4">
-                    <button id="threedaygraph" class="btn btn-primary btn-lg btn-block">Show Last 72 hrs</button>
+                    <button id="threedaygraph" class="btn btn-lg btn-block">Show Last 72 hrs</button>
                 </div>
             </div>
             </br>

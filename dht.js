@@ -29,11 +29,16 @@ function UpdateCurrentData(){
 		}
 	);
 };
-function UpdateChart(graphdate,period,interval){
+function UpdateChart(graphdate,period,interval,button){
     if(graphdate != '') graphdate = graphdate + " 00:00:00";
     $("#graph :input").prop("disabled",true);
+    $("#graph :button").removeClass("btn-primary");
+    $("#graph :button").addClass("btn-default");
+    button.removeClass("btn-default");
+    button.addClass("btn-primary");
     $(".loadinggif").show();
     $("#chartdiv").hide();
+    $(".nodata").hide();
 	$.getJSON("dht_json.php?c="+period+"&s=all&ft=1&i="+interval+"&f="+graphdate,function(dhtJSON){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
 			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
@@ -52,21 +57,20 @@ function UpdateChart(graphdate,period,interval){
                     chartData.push(tmpchartData);
 				}
                 make_chart();
+                $("#chartdiv").show();
 				}
             else
             {
-                $("#chartdiv").html("No Date");
+                $(".nodata").show();
             }
 			}
         $(".loadinggif").hide();
-        $("#chartdiv").show();
         $("#graph :input").prop("disabled",false);
 		}
 	);
 };
 $(document).ready(function () {
     UpdateCurrentData();
-    UpdateChart("",86400,60);
     setInterval(UpdateCurrentData,1000);
     $( document ).tooltip({track: true});
     $("html").niceScroll();
@@ -90,13 +94,13 @@ $(document).ready(function () {
         });
     }
     $("#onedaygraph").click(function(){
-        UpdateChart("",86400,60);
+        UpdateChart("",86400,60,$(this));
     });
     $("#twodaygraph").click(function(){
-        UpdateChart("",86400*2,60);
+        UpdateChart("",86400*2,60,$(this));
     });
     $("#threedaygraph").click(function(){
-        UpdateChart("",86400*3,60);
+        UpdateChart("",86400*3,60,$(this));
     });
     $('#graphdate').datepicker({
         format: "yyyy-mm-dd",
@@ -106,9 +110,10 @@ $(document).ready(function () {
     $("#updategraph").click(function(){
         if($("#graphdate").val()!='')
         {
-            UpdateChart($("#graphdate").val(),86400,60);
+            UpdateChart($("#graphdate").val(),86400,60,$(this));
         }
     });
+    $("#onedaygraph").click();
 });
 function prepare_submit(){
     HoldOn.open({

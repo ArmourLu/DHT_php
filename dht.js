@@ -38,7 +38,7 @@ function UpdateChart(graphdate,period,interval,button){
     button.addClass("btn-primary");
     $(".loadinggif").show();
     $("#chartdiv").hide();
-    $(".nodata").hide();
+    $(".chartnodata").hide();
 	$.getJSON("dht_json.php?c="+period+"&s=all&ft=1&i="+interval+"&f="+graphdate,function(dhtJSON){
 		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
 			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
@@ -61,7 +61,7 @@ function UpdateChart(graphdate,period,interval,button){
 				}
             else
             {
-                $(".nodata").show();
+                $(".chartnodata").show();
             }
 			}
         $(".loadinggif").hide();
@@ -69,7 +69,7 @@ function UpdateChart(graphdate,period,interval,button){
 		}
 	);
 };
-$(document).ready(function () {
+$(document).ready(function ($) {
     UpdateCurrentData();
     setInterval(UpdateCurrentData,1000);
     $( document ).tooltip({track: true});

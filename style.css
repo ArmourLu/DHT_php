@@ -1,6 +1,6 @@
     body {
     font-family: 'Ubuntu', sans-serif !important;
-    background-color: #f0f0f0 !important;
+    background-color: #e6e6e6 !important;
     }
 
     .ui-widget {
@@ -101,7 +101,7 @@
         display: inline-block;
     }
 
-    .nodata {
+    .chartnodata {
         width: 100%;
         height: 500px;
         line-height: 500px;

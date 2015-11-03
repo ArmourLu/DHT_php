@@ -66,7 +66,7 @@ $sensor_num = (int)$row[0];
         <div id="graph" class="block-info text-center">
             <div id="chartdiv"></div>
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
-            <div class="nodata">NO DATA</div>
+            <div class="chartnodata">NO DATA</div>
             </br>
             <div class="row">
                 <div class="col-lg-4">

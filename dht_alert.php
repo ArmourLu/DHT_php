@@ -47,7 +47,7 @@ if($cmd == "verify")
                 $curtime = date("Y-m-d H:i:s");
                 $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime', hash='$hash' where ID='$id'";
                 $result = mysql_query($sqlstr);
-                exec("python $PythonPath mail $email remove",$output);
+                exec("python $PythonPath mail $email remove > /dev/null &");
             }
         }
         else
@@ -109,7 +109,7 @@ elseif($cmd == "add")
             mysql_query($sqlstr);
             $status = "info";
             $comment = "A confirmation email has been sent to your email address. Please click on the Activation Link to activate your alert.";
-            exec("python $PythonPath mail $email verify",$output);
+            exec("python $PythonPath mail $email verify > /dev/null &");
         }
         else
         {
@@ -133,7 +133,7 @@ elseif($cmd == "add")
                     $id = $row['ID'];
                     $sqlstr = "update useralert set UpdateTime='$curtime' where ID=$id";
                     mysql_query($sqlstr);
-                    exec("python $PythonPath mail $email verify",$output);
+                    exec("python $PythonPath mail $email verify > /dev/null &");
                 }
                 else
                 {

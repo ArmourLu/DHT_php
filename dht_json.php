@@ -77,12 +77,12 @@ if($query_end_datetime != ""){
 else{
     if($query_interval==1)
     {
-	   $sqlstr = "select $query_fields from dht order by id desc limit 0,$query_count";
+	   $sqlstr = "select $query_fields from dht force index (id) order by id desc limit 0,$query_count";
     }
     else
     {
         $query_count = $query_count / $query_interval;
-        $sqlstr = "select $query_fields from dht where UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc limit 0,$query_count";
+        $sqlstr = "select $query_fields from dht force index (id) where UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc limit 0,$query_count";
     }
 }
 $returnjson['PrepareTime'] = number_format((microtime(true) - $start), 2) . "s";

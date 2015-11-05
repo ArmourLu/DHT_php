@@ -107,6 +107,11 @@ $(document).ready(function ($) {
         autoclose: true,
         todayHighlight: true
     });
+    $.getJSON("dht_json.php",function(dhtJSON){
+        if(dhtJSON.Status == "OK"){
+            $('#graphdate').datepicker('update', dhtJSON.LastDate.split(" ")[0]);
+        }
+    });
     $("#updategraph").click(function(){
         if($("#graphdate").val()!='')
         {

@@ -11,8 +11,8 @@ function getUrlParameter(sParam) {
     }
 };
 function UpdateCurrentData(){
-	$.getJSON("dht_json.php?s=all&ft=1",function(dhtJSON){
-		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
+	$.getJSON("dht_json.php?s=a",function(dhtJSON){
+		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "a"){
 			var LastDate = dhtJSON.LastDate;
 			if(dhtJSON["Count"]>=1){
 				for(i=0;i<$(".reading").length/2&&i<dhtJSON.SensorCount;i++){
@@ -39,8 +39,8 @@ function UpdateChart(graphdate,period,interval,button){
     $(".loadinggif").show();
     $("#chartdiv").hide();
     $(".chartnodata").hide();
-	$.getJSON("dht_json.php?c="+period+"&s=all&ft=1&i="+interval+"&f="+graphdate,function(dhtJSON){
-		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "all"){
+	$.getJSON("dht_json.php?c="+period+"&s=a&i="+interval+"&f="+graphdate,function(dhtJSON){
+		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "a"){
 			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
             var interval = dhtJSON.Interval;
             chartData = [];
@@ -109,7 +109,9 @@ $(document).ready(function ($) {
     });
     $.getJSON("dht_json.php",function(dhtJSON){
         if(dhtJSON.Status == "OK"){
-            $('#graphdate').datepicker('update', dhtJSON.LastDate.split(" ")[0]);
+            var LastDate = dhtJSON.LastDate.split(" ")[0];
+            $('#graphdate').datepicker('update', LastDate);
+            $('#graphdate').datepicker('setEndDate', LastDate);
         }
     });
     $("#updategraph").click(function(){

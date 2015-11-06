@@ -1,19 +1,23 @@
 <?php
 include "/var/www_private/mysql_conn.php";
-$is_Debug = 1;
+$Debug_Table = 0;
+$Debug_Time = 1;
+$Debug_SQL = 0;
 
-if($is_Debug) $start = microtime(true);
+if($Debug_Time) $start = microtime(true);
 
-$max_query_count = 60 * 60 * 24 * 7; // 7 days
+$max_query_count = 60 * 60 * 24;
 
 //Get count
 $query_count = $_GET['c'];
 if($query_count=='' || !is_numeric($query_count)) $query_count=1;
-if($query_count>$max_query_count) $query_count = $max_query_count;
 
 //Get interval
 $query_interval = $_GET['i'];
 if($query_interval=='' || !is_numeric($query_interval)) $query_interval=1;
+
+//Check query count
+if($query_count/$query_interval > $max_query_count) $query_count = $max_query_count * $query_interval;
 
 //Get sensor#
 $query_sensor = $_GET['s'];
@@ -68,11 +72,11 @@ else{
         $sqlstr = "select $query_fields from dht force index (id) where UNIX_TIMESTAMP(DateTime)%$query_interval=0 order by id desc limit 0,$query_count";
     }
 }
-if($is_Debug) $returnjson['PrepareTime'] = number_format((microtime(true) - $start), 2) . "s";
-if($is_Debug) $start = microtime(true);
+if($Debug_Time) $returnjson['PrepareTime'] = number_format((microtime(true) - $start), 2) . "s";
+if($Debug_Time) $start = microtime(true);
 //Execute SQL
 $result = mysql_query($sqlstr);
-if($is_Debug) $returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
+if($Debug_Time) $returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
 $DhtArray = array();
 
 // Loop for fetching date from mysql
@@ -85,7 +89,8 @@ $PreGroup = 0;
 $PreData = '';
 $MissCount = 0;
 
-if($is_Debug) $start = microtime(true);
+if($Debug_Time) $start = microtime(true);
+
 while ($row = mysql_fetch_row($result)) {
 	if($DhtArrayCount>=$query_count) break;
     if($PreDate==$row[2]) continue;
@@ -155,17 +160,17 @@ while ($row = mysql_fetch_row($result)) {
     $PreGroup = $row[3];
 }
 
-if($is_Debug) $returnjson['ParseTime'] = number_format((microtime(true) - $start), 2) . "s";
+if($Debug_Time) $returnjson['ParseTime'] = number_format((microtime(true) - $start), 2) . "s";
 $returnjson['Status'] = "OK";
-if($is_Debug) $returnjson['SQL'] = $sqlstr;
-if($is_Debug) $returnjson['LastID'] = $LastID;
+if($Debug_SQL) $returnjson['SQL'] = $sqlstr;
+if($Debug_Table) $returnjson['LastID'] = $LastID;
 $returnjson['LastDate'] = date("Y-m-d H:i:s",$LastDate);
 $returnjson['Count'] = count($DhtArray);
 $returnjson['Interval'] = (int)$query_interval;
 $returnjson['SensorCount'] = count($DhtArray[0]);
 //$returnjson['Group'] = $query_group;
 $returnjson['Sensor'] = $query_sensor;
-if($is_Debug) $returnjson['MissCount'] = $MissCount;
+if($Debug_Table) $returnjson['MissCount'] = $MissCount;
 $returnjson['Data'] = $DhtArray;
 echo json_encode($returnjson);
 

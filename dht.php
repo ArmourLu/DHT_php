@@ -20,6 +20,7 @@ $sensor_num = (int)$row[0];
     <meta name="author" content="Armour Lu, Inventec">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
@@ -27,7 +28,9 @@ $sensor_num = (int)$row[0];
     <link rel="stylesheet" href="/HoldOn.js/css/HoldOn.css">
     <link href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.cookie.js"
     <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <script src="/ui/jquery-ui-1.11.4/jquery-ui.js"></script>
     <script src="/js/jquery.nicescroll.js"></script>
     <script src="/sweetalert/sweetalert.min.js"></script>
@@ -46,10 +49,13 @@ $sensor_num = (int)$row[0];
     <div class="container">
         <div class="block-header smallinfotext">
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-4">
                     <img src="/image/inventec/inventec_small.png" style="margin:3px; margin-left:10px;">
                 </div>
-                <div id="currenttime" title="Update Time" class="col-lg-8 text-center"></div>
+                <div id="currenttime" title="Update Time" class="col-lg-4 text-center"></div>
+                <div class="col-lg-4 text-right">
+                    Auto Refresh <input type="checkbox" name="autoupdate">
+                </div>
             </div>
         </div>
         <div class="headertext text-center"><?=$str_ServiceName?></div>

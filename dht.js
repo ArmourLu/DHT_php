@@ -69,9 +69,9 @@ function UpdateChart(graphdate,period,interval,button){
 		}
 	);
 };
+var CurrentDataTimer;
 $(document).ready(function ($) {
     UpdateCurrentData();
-    setInterval(UpdateCurrentData,1000);
     $( document ).tooltip({track: true});
     $("html").niceScroll();
     $("#alertsubmit").click(function(){
@@ -121,6 +121,26 @@ $(document).ready(function ($) {
         }
     });
     $("#onedaygraph").click();
+    $("input[name='autoupdate']").bootstrapSwitch();
+    $("input[type=checkbox]").each(function() {
+        var mycookie = $.cookie($(this).attr('name'));
+        if (mycookie && mycookie == "true") {
+            if(!$(this).is(':checked')) $(this).bootstrapSwitch("toggleState");
+            CurrentDataTimer = setInterval(UpdateCurrentData,1000);
+        }
+    });
+    $("input[name='autoupdate']").on('switchChange.bootstrapSwitch', function(event, state) {
+        if($(this).is(':checked')){
+            CurrentDataTimer = setInterval(UpdateCurrentData,1000);
+        }
+        else{
+            clearInterval(CurrentDataTimer);
+        }
+        $.cookie($(this).attr("name"), $(this).prop('checked'), {
+            path: '/',
+            expires: 365
+        });
+    });
 });
 function prepare_submit(){
     HoldOn.open({

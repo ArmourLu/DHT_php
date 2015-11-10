@@ -1,9 +1,13 @@
 <?php
-include "/var/www_private/mysql_conn.php";
 $Debug_Table = 0;
 $Debug_Time = 1;
 $Debug_SQL = 0;
 
+if($Debug_Time) $start = microtime(true);
+
+include "/var/www_private/mysql_conn.php";
+
+if($Debug_Time) $returnjson['ConnectTime'] = number_format((microtime(true) - $start), 2) . "s";
 if($Debug_Time) $start = microtime(true);
 
 $max_query_count = 60 * 60 * 24;
@@ -88,6 +92,7 @@ $PreDate = 0;
 $PreGroup = 0;
 $PreData = '';
 $MissCount = 0;
+$DupCount = 0;
 
 if($Debug_Time) $start = microtime(true);
 
@@ -109,12 +114,16 @@ while ($row = mysql_fetch_row($result)) {
     }
     else $MissingSecond=0;
 
-    if($PreData != $row[1])
+    if($PreData == $row[1])
+    {
+        $DupCount ++;
+    }
+    else
     {
         $readings = explode(',',$row[1]);
         if(count($readings) != $sensor_num*2) continue;
 
-        if($query_sensor=='a')
+        if($query_sensor === 'a')
         {
             $tmpArray = array();
             for($i=0 ; $i < $readings_count ; $i++){
@@ -168,11 +177,9 @@ $returnjson['LastDate'] = date("Y-m-d H:i:s",$LastDate);
 $returnjson['Count'] = count($DhtArray);
 $returnjson['Interval'] = (int)$query_interval;
 $returnjson['SensorCount'] = count($DhtArray[0]);
-//$returnjson['Group'] = $query_group;
 $returnjson['Sensor'] = $query_sensor;
 if($Debug_Table) $returnjson['MissCount'] = $MissCount;
+if($Debug_Table) $returnjson['DupCount'] = $DupCount;
 $returnjson['Data'] = $DhtArray;
 echo json_encode($returnjson);
-
-//$con->close();
 ?>

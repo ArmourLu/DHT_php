@@ -18,10 +18,10 @@ function UpdateCurrentData(){
 				for(i=0;i<$(".reading").length/2&&i<dhtJSON.SensorCount;i++){
 					t = dhtJSON.Data[0][i][0].toString().split(".");
 					h = dhtJSON.Data[0][i][1].toString().split(".");
-					$(".reading").eq(i*2).html(t[0].length>1?t[0]:"0"+t[0]);
-                    $(".reading").eq(i*2+1).html(h[0].length>1?h[0]:"0"+h[0]);
-                    $(".readingdecimal").eq(i*2).html(t.length>1?"."+t[1][0]:".0");
-                    $(".readingdecimal").eq(i*2+1).html(h.length>1?"."+h[1][0]:".0");
+                    $("#curdata"+i+" .reading").eq(0).html(t[0].length>1?t[0]:"0"+t[0]);
+                    $("#curdata"+i+" .reading").eq(1).html(h[0].length>1?h[0]:"0"+h[0]);
+                    $("#curdata"+i+" .readingdecimal").eq(0).html(t.length>1?"."+t[1][0]:".0");
+                    $("#curdata"+i+" .readingdecimal").eq(1).html(h.length>1?"."+h[1][0]:".0");
 				}
 				$("#currenttime").html(LastDate);
 				}
@@ -56,7 +56,14 @@ function UpdateChart(graphdate,period,interval,button){
                     }
                     chartData.push(tmpchartData);
 				}
-                make_chart();
+                if(chart === null){
+                    make_chart();
+                }
+                else{
+                    chart.dataProvider = chartData;
+                    chart.validateData();
+                }
+                
                 $("#chartdiv").show();
 				}
             else
@@ -121,12 +128,16 @@ $(document).ready(function ($) {
         }
     });
     $("#onedaygraph").click();
-    $("input[name='autoupdate']").bootstrapSwitch();
+    $.fn.bootstrapSwitch.defaults.size = 'small';
+    $("input[type=checkbox]").bootstrapSwitch();
     $("input[type=checkbox]").each(function() {
         var mycookie = $.cookie($(this).attr('name'));
-        if (mycookie && mycookie == "true") {
+        if (mycookie === undefined || mycookie == "true") {
             if(!$(this).is(':checked')) $(this).bootstrapSwitch("toggleState");
             CurrentDataTimer = setInterval(UpdateCurrentData,1000);
+        }
+        else {
+            if($(this).is(':checked')) $(this).bootstrapSwitch("toggleState");
         }
     });
     $("input[name='autoupdate']").on('switchChange.bootstrapSwitch', function(event, state) {
@@ -141,7 +152,25 @@ $(document).ready(function ($) {
             expires: 365
         });
     });
+    $('#data-sortable').sortable({
+        axis: "y",
+        update: function(event, ui) {
+            localStorage.setItem("sorted", $("#data-sortable").sortable("toArray") );
+        }
+    }).disableSelection();
+    restoreSorted();
 });
+function restoreSorted(){
+      var sorted = localStorage["sorted"];      
+      if(sorted == undefined) return;
+
+      var elements = $("#data-sortable");
+      var sortedArr = sorted.split(",");
+      for (var i = 0; i < sortedArr.length; i++){
+          var el = elements.find("#" + sortedArr[i]);
+          $("#data-sortable").append(el);
+      };
+};
 function prepare_submit(){
     HoldOn.open({
         theme:"sk-bounce",

@@ -19,19 +19,19 @@ $sensor_num = (int)$row[0];
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="Armour Lu, Inventec">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <link rel="stylesheet" href="/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/ui/jquery-ui-themes-1.11.4/themes/start/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
     <link rel="stylesheet" href="/HoldOn.js/css/HoldOn.css">
     <link href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <script src="/js/jquery.js"></script>
-    <script src="/js/jquery.cookie.js"
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script src="/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-    <script src="/ui/jquery-ui-1.11.4/jquery-ui.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="/js/jquery.nicescroll.js"></script>
     <script src="/sweetalert/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
@@ -49,30 +49,38 @@ $sensor_num = (int)$row[0];
     <div class="container">
         <div class="block-header smallinfotext">
             <div class="row">
-                <div class="col-lg-4">
-                    <img src="/image/inventec/inventec_small.png" style="margin:3px; margin-left:10px;">
+                <div class="col-lg-2">
+                    <img src="/image/inventec/inventec_small.png" style="margin:5px; margin-left:10px;">
                 </div>
-                <div id="currenttime" title="Update Time" class="col-lg-4 text-center"></div>
-                <div class="col-lg-4 text-right">
+                <div id="currenttime" title="Update Time" class="col-lg-offset-2 col-lg-4 text-center"></div>
+                <div class="col-lg-offset-1 col-lg-3 text-right"  title="Refresh Last Data and Time">
                     Auto Refresh <input type="checkbox" name="autoupdate">
                 </div>
             </div>
         </div>
         <div class="headertext text-center"><?=$str_ServiceName?></div>
+        <div id="data-sortable">
 <? for($i=0;$i < $sensor_num;$i++){ ?>
-        <div class="block-data text-center infotext">
-            <span class="reading"></span><span class="readingdecimal"></span>
-            <span>&deg;C</span>
-            <span>&nbsp;&nbsp;</span>
-            <span class="reading"></span><span class="readingdecimal"></span>
-            <span>%</span>
-        </div>
+            <div class="block-data text-center infotext"  id="<?='curdata'.$i?>">
+                <div class="row">
+                    <div class="col-lg-1 hidetext"><?='#'.$i?></div>
+                    <div class="col-lg-6 col-lg-offset-2">
+                        <span class="reading"></span><span class="readingdecimal"></span>
+                        <span>&deg;C</span>
+                        <span>&nbsp;&nbsp;</span>
+                        <span class="reading"></span><span class="readingdecimal"></span>
+                        <span>%</span>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+            </div>
 <? }; ?>
+        </div>
         <div class="headertext text-center">Graph</div>
         <div id="graph" class="block-info text-center">
-            <div id="chartdiv"></div>
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
             <div class="chartnodata">NO DATA</div>
+            <div id="chartdiv"></div>
             </br>
             <div class="row">
                 <div class="col-lg-4">
@@ -95,7 +103,7 @@ $sensor_num = (int)$row[0];
                 <div class="col-lg-3"></div>
                 <div class="col-lg-3">
                     <div class="input-group date">
-                        <input id="graphdate" type="text" class="form-control input-lg" data-date-end-date="0d"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span><input id="graphdate" type="text" class="form-control input-lg" data-date-end-date="0d">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -109,7 +117,9 @@ $sensor_num = (int)$row[0];
             <div class="row">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
-                    <input id="alertemail" type="email" class="form-control input-lg" id="email" placeholder="Email Address">
+                   <div class="input-group">
+                    <span class="input-group-addon">@</span><input id="alertemail" type="email" class="form-control input-lg" placeholder="Email Address">
+                    </div>
                 </div>
                 <div class="col-lg-4">
                     <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>

@@ -1,5 +1,5 @@
 var chartData = [];
-var chart;
+var chart = null;
 
 var periodformat = [{period:'fff',format:'JJ:NN:SS'},
 {period:'ss',format:'JJ:NN:SS'},

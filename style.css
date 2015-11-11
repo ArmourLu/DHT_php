@@ -47,6 +47,11 @@
         width: 30px;
         letter-spacing: -3px;
     }
+
+    .hidetext {
+        font-size: 24px;
+        color: #cccccc;
+    }
     
     .block-data,
     .block-info,

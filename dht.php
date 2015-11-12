@@ -70,7 +70,7 @@ $sensor_num = (int)$row[0];
                         <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>%</span>
                     </div>
-                    <div class="col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='#curdata'.$i?>'>
+                    <div class="col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='curdata'.$i?>'>
                         <i class="glyphicon glyphicon-menu-down"></i>
                     </div>
                 </div>

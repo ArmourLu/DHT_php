@@ -135,8 +135,8 @@ $(document).ready(function ($) {
     $.fn.bootstrapSwitch.defaults.size = 'small';
     $("input[type=checkbox]").bootstrapSwitch();
     $("input[type=checkbox]").each(function() {
-        var mycookie = $.cookie($(this).attr('name'));
-        if (mycookie === undefined || mycookie == "true") {
+        var chkbox = localStorage[$(this).attr('name')];
+        if (chkbox == undefined || chkbox == "true") {
             if(!$(this).is(':checked')) $(this).bootstrapSwitch("toggleState");
             CurrentDataTimer = setInterval(UpdateCurrentData,1000);
         }
@@ -151,10 +151,7 @@ $(document).ready(function ($) {
         else{
             clearInterval(CurrentDataTimer);
         }
-        $.cookie($(this).attr("name"), $(this).prop('checked'), {
-            path: '/',
-            expires: 365
-        });
+        localStorage.setItem($(this).attr("name"), $(this).prop('checked'));
     });
     $('#data-sortable').sortable({
         axis: "y",
@@ -164,22 +161,34 @@ $(document).ready(function ($) {
     }).disableSelection();
     restoreSorted();
     $('.datamenuresize').click(function(){
-        var parent = $(this).data('data-parent');
+        var parent = '#'+$(this).data('data-parent');
         var size = $(parent).data('data-size');
         var tosize = '';
         var resizable = $(parent).data('data-resizable');
         if(size == 'max') tosize = 'min';
         else tosize = 'max';
         $(parent).data('data-size',tosize);
-        
         for(var i=0;i<resizable.length;i++){
             $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
             $(parent + ' .' + resizable[i]).addClass(resizable[i]+tosize);
         }
+        localStorage.setItem(parent, tosize);
+    });
+    $('.datamenuresize').each(function(){
+        var parent = '#'+$(this).data('data-parent');
+        var tosize = localStorage[parent];
+        if(tosize == 'min'){
+            var size = 'max';
+            var resizable = $(parent).data('data-resizable');
+            for(var i=0;i<resizable.length;i++){
+                $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
+                $(parent + ' .' + resizable[i]).addClass(resizable[i]+tosize);
+            }
+        }
     });
 });
 function restoreSorted(){
-      var sorted = localStorage["sorted"];      
+      var sorted = localStorage["sorted"];
       if(sorted == undefined) return;
 
       var elements = $("#data-sortable");

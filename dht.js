@@ -153,40 +153,49 @@ $(document).ready(function ($) {
         }
         localStorage.setItem($(this).attr("name"), $(this).prop('checked'));
     });
+    restoreSorted();
     $('#data-sortable').sortable({
         axis: "y",
         update: function(event, ui) {
             localStorage.setItem("sorted", $("#data-sortable").sortable("toArray") );
         }
     }).disableSelection();
-    restoreSorted();
+    $('.datamenuresize').each(function(){
+        var parent = '#'+$(this).data('data-parent');
+        var resize = localStorage[parent];
+        if(resize == $(parent).data('data-resize')){
+            var size = $(parent).data('data-size');
+            ResizeCurrentData(parent,size,resize);
+        }
+    });
     $('.datamenuresize').click(function(){
         var parent = '#'+$(this).data('data-parent');
         var size = $(parent).data('data-size');
-        var tosize = '';
-        var resizable = $(parent).data('data-resizable');
-        if(size == 'max') tosize = 'min';
-        else tosize = 'max';
-        $(parent).data('data-size',tosize);
-        for(var i=0;i<resizable.length;i++){
-            $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
-            $(parent + ' .' + resizable[i]).addClass(resizable[i]+tosize);
-        }
-        localStorage.setItem(parent, tosize);
-    });
-    $('.datamenuresize').each(function(){
-        var parent = '#'+$(this).data('data-parent');
-        var tosize = localStorage[parent];
-        if(tosize == 'min'){
-            var size = 'max';
-            var resizable = $(parent).data('data-resizable');
-            for(var i=0;i<resizable.length;i++){
-                $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
-                $(parent + ' .' + resizable[i]).addClass(resizable[i]+tosize);
-            }
-        }
+        var resize = $(parent).data('data-resize');
+        ResizeCurrentData(parent,size,resize);
+        localStorage.setItem(parent, resize);
     });
 });
+function ResizeCurrentData(parent,size,resize){
+    var resizable = $(parent).data('data-resizable');
+
+    $(parent).data('data-size',resize);
+    $(parent).data('data-resize',size);
+
+    for(var i=0;i<resizable.length;i++){
+        $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
+        $(parent + ' .' + resizable[i]).addClass(resizable[i]+resize);
+    }
+    
+    var icon1 = $(parent + ' .glyphicon').data('icon1');
+    var icon2 = $(parent + ' .glyphicon').data('icon2');
+    
+    $(parent + ' .glyphicon').removeClass(icon1);
+    $(parent + ' .glyphicon').addClass(icon2);
+    
+    $(parent + ' .glyphicon').data('icon1',icon2);
+    $(parent + ' .glyphicon').data('icon2',icon1);
+};
 function restoreSorted(){
       var sorted = localStorage["sorted"];
       if(sorted == undefined) return;

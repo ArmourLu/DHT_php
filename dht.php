@@ -60,7 +60,7 @@ $sensor_num = (int)$row[0];
         <div class="headertext text-center"><?=$str_ServiceName?></div>
         <div id="data-sortable">
 <? for($i=0;$i < $sensor_num;$i++){ ?>
-            <div class="block-data text-center infotext" id="<?='curdata'.$i?>" data-data-size='max' data-data-resizable='["datamenutext","reading","readingdecimal"]'>
+            <div class="block-data text-center infotext" id="<?='curdata'.$i?>" data-data-size='max' data-data-resize='min' data-data-resizable='["datamenutext","reading","readingdecimal"]'>
                 <div class="row">
                     <div class="col-lg-1 datamenutext datamenutextmax"><?='#'.$i?></div>
                     <div class="col-lg-6 col-lg-offset-2">
@@ -71,7 +71,7 @@ $sensor_num = (int)$row[0];
                         <span>%</span>
                     </div>
                     <div class="col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='curdata'.$i?>'>
-                        <i class="glyphicon glyphicon-menu-down"></i>
+                        <i class="glyphicon glyphicon-menu-up" data-icon1='glyphicon-menu-up' data-icon2='glyphicon-menu-down'></i>
                     </div>
                 </div>
             </div>

@@ -40,41 +40,45 @@ function UpdateChart(graphdate,period,interval,button){
     $("#chartdiv").hide();
     $(".chartnodata").hide();
 	$.getJSON("dht_json.php?c="+period+"&s=a&i="+interval+"&f="+graphdate,function(dhtJSON){
-		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "a"){
+		if(dhtJSON.Status == "OK" && dhtJSON.Sensor == "a" && dhtJSON.Count >=1){
 			var LastDate = new Date(dhtJSON.LastDate.replace(' ','T')+'+08:00');
             var interval = dhtJSON.Interval;
             chartData = [];
-			if(dhtJSON["Count"]>=1){
-				for(i=dhtJSON.Count-1;i>=0;i--){
-                    var newDate = new Date(LastDate);
-                    newDate.setSeconds(newDate.getSeconds() - i * interval);
-                    var tmpchartData = {};
-                    tmpchartData["date"] = newDate;
-                    for(x=0;x<dhtJSON.SensorCount;x++){
-                        tmpchartData["t"+x.toString()] = dhtJSON.Data[i][x][0];
-                        tmpchartData["h"+x.toString()] = dhtJSON.Data[i][x][1];
-                    }
-                    chartData.push(tmpchartData);
-				}
-                if(chart === null){
-                    make_chart();
+            for(i=dhtJSON.Count-1;i>=0;i--){
+                var newDate = new Date(LastDate);
+                newDate.setSeconds(newDate.getSeconds() - i * interval);
+                var tmpchartData = {};
+                tmpchartData["date"] = newDate;
+                for(x=0;x<dhtJSON.SensorCount;x++){
+                    tmpchartData["t"+x.toString()] = dhtJSON.Data[i][x][0];
+                    tmpchartData["h"+x.toString()] = dhtJSON.Data[i][x][1];
                 }
-                else{
-                    chart.dataProvider = chartData;
-                    chart.validateData();
-                }
-                
-                $("#chartdiv").show();
-				}
-            else
-            {
-                $(".chartnodata").show();
+                chartData.push(tmpchartData);
             }
-			}
-        $(".loadinggif").hide();
+            $(".loadinggif").hide();
+            $("#chartdiv").show();
+            if(chart === null){
+                make_chart();
+            }
+            else{
+                chart.dataProvider = chartData;
+                chart.validateData();
+            }
+        }
+        else
+        {
+            $(".loadinggif").hide();
+            $(".chartnodata").html('NO DATA');
+            $(".chartnodata").show();
+        }
         $("#graph :input").prop("disabled",false);
-		}
-	);
+    })
+    .fail(function() {
+        $(".loadinggif").hide();
+        $(".chartnodata").html('INTERNAL ERROR');
+        $(".chartnodata").show();
+        $("#graph :input").prop("disabled",false);
+    });
 };
 var CurrentDataTimer;
 $(document).ready(function ($) {
@@ -159,6 +163,20 @@ $(document).ready(function ($) {
         }
     }).disableSelection();
     restoreSorted();
+    $('.datamenuresize').click(function(){
+        var parent = $(this).data('data-parent');
+        var size = $(parent).data('data-size');
+        var tosize = '';
+        var resizable = $(parent).data('data-resizable');
+        if(size == 'max') tosize = 'min';
+        else tosize = 'max';
+        $(parent).data('data-size',tosize);
+        
+        for(var i=0;i<resizable.length;i++){
+            $(parent + ' .' + resizable[i]).removeClass(resizable[i]+size);
+            $(parent + ' .' + resizable[i]).addClass(resizable[i]+tosize);
+        }
+    });
 });
 function restoreSorted(){
       var sorted = localStorage["sorted"];      

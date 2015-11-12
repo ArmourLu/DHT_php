@@ -8,8 +8,7 @@
     }
 
     .headertext,
-    .infotext,
-    #sensor_sel {
+    .infotext {
         font-size: 24px;
     }
     
@@ -34,8 +33,15 @@
         font-family: 'Roboto', sans-serif;
         text-align:  left;
         display: inline-block;
+    }
+
+    .readingmax {
         font-size: 80px;
         width: 88px;
+    }
+
+    .readingmin {
+        font-size: 24px;
     }
 
     .readingdecimal {
@@ -43,14 +49,33 @@
         font-family: 'Roboto', sans-serif;
         text-align:  left;
         display: inline-block;
+    }
+
+    .readingdecimalmax {
         font-size: 40px;
         width: 30px;
         letter-spacing: -3px;
     }
 
-    .hidetext {
+    .readingdecimalmin {
+        font-size: 24px;
+    }
+
+    .datamenuresize,
+    .datamenutext {
         font-size: 24px;
         color: #cccccc;
+    }
+    .datamenutextmax {
+        height: 110px;
+        line-height: 110px;
+        font-family: 'Roboto', sans-serif;
+    }
+    .datamenutextmin {
+        font-family: 'Roboto', sans-serif;
+    }
+    .datamenuresize {
+        cursor: pointer;
     }
     
     .block-data,
@@ -66,8 +91,13 @@
     .block-data {
         background-color: #ffffff;
         border-color: #dddddd;
+        cursor: n-resize;
     }
     
+    .block-data:hover {
+        border-color: #848484;
+        box-shadow:2px 2px 2px rgba(25%, 25%, 40%, 0.5);
+    }
     .block-info {
         background-color: #ffffff;
         border-color: #afb4bf;

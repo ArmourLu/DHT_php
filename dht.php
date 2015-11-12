@@ -23,7 +23,6 @@ $sensor_num = (int)$row[0];
     <link rel="stylesheet" href="/bootstrap-switch/css/bootstrap3/bootstrap-switch.css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
     <link rel="stylesheet" href="/HoldOn.js/css/HoldOn.css">
     <link href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
@@ -61,17 +60,19 @@ $sensor_num = (int)$row[0];
         <div class="headertext text-center"><?=$str_ServiceName?></div>
         <div id="data-sortable">
 <? for($i=0;$i < $sensor_num;$i++){ ?>
-            <div class="block-data text-center infotext"  id="<?='curdata'.$i?>">
+            <div class="block-data text-center infotext" id="<?='curdata'.$i?>" data-data-size='max' data-data-resizable='["datamenutext","reading","readingdecimal"]'>
                 <div class="row">
-                    <div class="col-lg-1 hidetext"><?='#'.$i?></div>
+                    <div class="col-lg-1 datamenutext datamenutextmax"><?='#'.$i?></div>
                     <div class="col-lg-6 col-lg-offset-2">
-                        <span class="reading"></span><span class="readingdecimal"></span>
+                        <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>&deg;C</span>
                         <span>&nbsp;&nbsp;</span>
-                        <span class="reading"></span><span class="readingdecimal"></span>
+                        <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>%</span>
                     </div>
-                    <div class="col-lg-1"></div>
+                    <div class="col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='#curdata'.$i?>'>
+                        <i class="glyphicon glyphicon-menu-down"></i>
+                    </div>
                 </div>
             </div>
 <? }; ?>

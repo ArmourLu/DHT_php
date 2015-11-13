@@ -48,11 +48,11 @@ $sensor_num = (int)$row[0];
     <div class="container">
         <div class="block-header smallinfotext">
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-sm-4 col-lg-2">
                     <img src="/image/inventec/inventec_small.png" style="margin:5px; margin-left:10px;">
                 </div>
-                <div id="currenttime" title="Update Time" class="col-lg-offset-2 col-lg-4 text-center"></div>
-                <div class="col-lg-offset-1 col-lg-3 text-right"  title="Refresh Last Data and Time">
+                <div id="currenttime" title="Update Time" class="col-sm-4 col-lg-offset-2 col-lg-4 text-center"></div>
+                <div class="col-sm-4 col-lg-offset-1 col-lg-3 text-right"  title="Refresh Last Data and Time">
                     Auto Refresh <input type="checkbox" name="autoupdate">
                 </div>
             </div>
@@ -62,15 +62,15 @@ $sensor_num = (int)$row[0];
 <? for($i=0;$i < $sensor_num;$i++){ ?>
             <div class="block-data text-center infotext" id="<?='curdata'.$i?>" data-data-size='max' data-data-resize='min' data-data-resizable='["datamenutext","reading","readingdecimal"]'>
                 <div class="row">
-                    <div class="col-lg-1 datamenutext datamenutextmax"><?='#'.$i?></div>
-                    <div class="col-lg-6 col-lg-offset-2">
+                    <div class="col-sm-3 col-lg-1 datamenutext datamenutextmax"><?='#'.$i?></div>
+                    <div class="col-sm-6 col-lg-6 col-lg-offset-2">
                         <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>&deg;C</span>
                         <span>&nbsp;&nbsp;</span>
                         <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>%</span>
                     </div>
-                    <div class="col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='curdata'.$i?>'>
+                    <div class="col-sm-3 col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='curdata'.$i?>'>
                         <i class="glyphicon glyphicon-menu-up" data-icon1='glyphicon-menu-up' data-icon2='glyphicon-menu-down'></i>
                     </div>
                 </div>
@@ -84,30 +84,30 @@ $sensor_num = (int)$row[0];
             <div id="chartdiv"></div>
             </br>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-sm-4 col-lg-4">
                     <button id="onedaygraph" class="btn btn-lg btn-block">Show Last 24 hrs</button>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-4 col-lg-4">
                     <button id="twodaygraph" class="btn btn-lg btn-block">Show Last 48 hrs</button>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-4 col-lg-4">
                     <button id="threedaygraph" class="btn btn-lg btn-block">Show Last 72 hrs</button>
                 </div>
             </div>
             </br>
             <div class="row">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4 infotext">Or Select a day to show</div>
+                <div class="col-sm-3 col-lg-4"></div>
+                <div class="col-sm-6 col-lg-4 infotext">Or Select a day to show</div>
             </div>
             </br>
             <div class="row">
-                <div class="col-lg-3"></div>
-                <div class="col-lg-3">
+                <div class="col-sm-3 col-lg-3"></div>
+                <div class="col-sm-3 col-lg-3">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span><input id="graphdate" type="text" class="form-control input-lg" data-date-end-date="0d">
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-sm-3 col-lg-3">
                     <button id="updategraph" class="btn btn-primary btn-lg btn-block">Show</button>
                 </div>
             </div>
@@ -116,13 +116,13 @@ $sensor_num = (int)$row[0];
         <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
         <div id="alterme" class="block-info">
             <div class="row">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4">
+                <div class="col-sm-2 col-lg-4"></div>
+                <div class="col-sm-6 col-lg-4">
                    <div class="input-group">
                     <span class="input-group-addon">@</span><input id="alertemail" type="email" class="form-control input-lg" placeholder="Email Address">
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-4 col-lg-4">
                     <button id="alertsubmit" class="btn btn-primary btn-lg">Submit</button>
                     <button id="alertclear" class="btn btn-default btn-lg">Clear</button>
                 </div>

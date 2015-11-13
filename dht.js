@@ -57,6 +57,7 @@ function UpdateChart(graphdate,period,interval,button){
             }
             $(".loadinggif").hide();
             $("#chartdiv").show();
+            $("#graph :input").prop("disabled",false);
             if(chart === null){
                 make_chart();
             }
@@ -70,8 +71,8 @@ function UpdateChart(graphdate,period,interval,button){
             $(".loadinggif").hide();
             $(".chartnodata").html('NO DATA');
             $(".chartnodata").show();
+            $("#graph :input").prop("disabled",false);
         }
-        $("#graph :input").prop("disabled",false);
     })
     .fail(function() {
         $(".loadinggif").hide();

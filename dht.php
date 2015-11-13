@@ -11,8 +11,7 @@ $result = mysql_query($sqlstr);
 $row = mysql_fetch_row($result);
 $sensor_num = (int)$row[0];
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!doctype html>
 <head>
     <title><?=$str_ServiceName?></title>
     <meta charset="utf-8">
@@ -70,8 +69,8 @@ $sensor_num = (int)$row[0];
                         <span class="reading readingmax"></span><span class="readingdecimal readingdecimalmax"></span>
                         <span>%</span>
                     </div>
-                    <div class="col-sm-3 col-lg-1 col-lg-offset-2 datamenuresize" data-data-parent='<?='curdata'.$i?>'>
-                        <i class="glyphicon glyphicon-menu-up" data-icon1='glyphicon-menu-up' data-icon2='glyphicon-menu-down'></i>
+                    <div class="col-sm-3 col-lg-1 col-lg-offset-2">
+                        <i class="glyphicon glyphicon-menu-up datamenuresize" data-data-parent='<?='curdata'.$i?>' data-icon1='glyphicon-menu-up' data-icon2='glyphicon-menu-down'></i>
                     </div>
                 </div>
             </div>
@@ -82,7 +81,7 @@ $sensor_num = (int)$row[0];
             <div class="loadinggif"><img src="/image/loading_spinner.gif"></div>
             <div class="chartnodata">NO DATA</div>
             <div id="chartdiv"></div>
-            </br>
+            <br>
             <div class="row">
                 <div class="col-sm-4 col-lg-4">
                     <button id="onedaygraph" class="btn btn-lg btn-block">Show Last 24 hrs</button>
@@ -94,12 +93,12 @@ $sensor_num = (int)$row[0];
                     <button id="threedaygraph" class="btn btn-lg btn-block">Show Last 72 hrs</button>
                 </div>
             </div>
-            </br>
+            <br>
             <div class="row">
                 <div class="col-sm-3 col-lg-4"></div>
                 <div class="col-sm-6 col-lg-4 infotext">Or Select a day to show</div>
             </div>
-            </br>
+            <br>
             <div class="row">
                 <div class="col-sm-3 col-lg-3"></div>
                 <div class="col-sm-3 col-lg-3">
@@ -113,12 +112,12 @@ $sensor_num = (int)$row[0];
             </div>
             <br/>
         </div>
-        <div class="headertext text-center" title="When Pi2/Remote Temperature Monitoring System is online, we will send you a notice.">Alert Me!</div>
+        <div class="headertext text-center">Alert Me!</div>
         <div id="alterme" class="block-info">
             <div class="row">
                 <div class="col-sm-2 col-lg-4"></div>
                 <div class="col-sm-6 col-lg-4">
-                   <div class="input-group">
+                   <div class="input-group"  title="When <?=$str_ServiceName?> is online, we will send you a notice.">
                     <span class="input-group-addon">@</span><input id="alertemail" type="email" class="form-control input-lg" placeholder="Email Address">
                     </div>
                 </div>
@@ -128,8 +127,11 @@ $sensor_num = (int)$row[0];
                 </div>
             </div>
         </div>
-        <div class="headertext text-center"></div>
+        <div class="headertext text-center">Options</div>
+        <div class="block-info text-center">
+            <button id='clearsetting' class="btn btn-default btn-lg">Clear Settings</button>
+        </div>
     </div>
-    </br></br>
+    <br><br>
 </body>
 </html>

@@ -158,28 +158,44 @@ $(document).ready(function ($) {
     $('#data-sortable').sortable({
         axis: "y",
         update: function(event, ui) {
-            localStorage.setItem("sorted", $("#data-sortable").sortable("toArray") );
+            localStorage.setItem("datasorted", $("#data-sortable").sortable("toArray") );
         }
     }).disableSelection();
     $('.datamenuresize').each(function(){
         var parent = '#'+$(this).data('data-parent');
         var resize = localStorage[parent];
         if(resize == $(parent).data('data-resize')){
-            var size = $(parent).data('data-size');
-            ResizeCurrentData(parent,size,resize);
+            ResizeCurrentData($(this));
         }
     });
     $('.datamenuresize').click(function(){
         var parent = '#'+$(this).data('data-parent');
-        var size = $(parent).data('data-size');
-        var resize = $(parent).data('data-resize');
-        ResizeCurrentData(parent,size,resize);
+        var resize = ResizeCurrentData($(this));
         localStorage.setItem(parent, resize);
     });
+    $('#clearsetting').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "You will clear all settings for this page!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, clear it!",
+            closeOnConfirm: false
+        },
+        function(){
+            localStorage.clear();
+            window.scrollTo(0,0);
+            location.reload();
+        });
+    });
 });
-function ResizeCurrentData(parent,size,resize){
+function ResizeCurrentData(icon){
+    var parent = '#'+icon.data('data-parent');
     var resizable = $(parent).data('data-resizable');
-
+    var size = $(parent).data('data-size');
+    var resize = $(parent).data('data-resize');
+    
     $(parent).data('data-size',resize);
     $(parent).data('data-resize',size);
 
@@ -196,9 +212,11 @@ function ResizeCurrentData(parent,size,resize){
     
     $(parent + ' .glyphicon').data('icon1',icon2);
     $(parent + ' .glyphicon').data('icon2',icon1);
+    
+    return resize;
 };
 function restoreSorted(){
-      var sorted = localStorage["sorted"];
+      var sorted = localStorage["datasorted"];
       if(sorted == undefined) return;
 
       var elements = $("#data-sortable");

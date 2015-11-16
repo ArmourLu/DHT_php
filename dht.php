@@ -27,9 +27,14 @@ $sensor_num = (int)$row[0];
     <link href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script src="/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
+        $.widget.bridge('uibutton', $.ui.button);
+        $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script src="/js/jquery.nicescroll.js"></script>
     <script src="/sweetalert/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
@@ -50,9 +55,43 @@ $sensor_num = (int)$row[0];
                 <div class="col-sm-4 col-lg-2">
                     <img src="/image/inventec/inventec_small.png" style="margin:5px; margin-left:10px;">
                 </div>
-                <div id="currenttime" title="Update Time" class="col-sm-4 col-lg-offset-2 col-lg-4 text-center"></div>
-                <div class="col-sm-4 col-lg-offset-1 col-lg-3 text-right"  title="Refresh Last Data and Time">
-                    Auto Refresh <input type="checkbox" name="autoupdate">
+                <div id="currenttime" title="Update Time" class="col-sm-4 col-lg-offset-2 col-lg-4 text-center" data-toggle="tooltip" data-placement="bottom"></div>
+                <div class="col-sm-4 col-lg-offset-2 col-lg-2 text-right">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#OptionMenu">Options</button>
+                    <!-- Option Modal -->
+                    <div class="modal fade" id="OptionMenu" tabindex="-1" role="dialog" aria-labelledby="OptionMenuLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title infotext text-left" id="myModalLabel">Options</h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row smallinfotext" title="Refresh Last Data and Time" data-toggle="tooltip" data-placement="bottom">
+                                <div class="col-lg-6 text-right">
+                                    Auto Refresh :
+                                </div>
+                                <div class="col-lg-6 text-left">
+                                    <input type="checkbox" name="autoupdate">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row smallinfotext"  title="Clear all settings for this page" data-toggle="tooltip" data-placement="bottom">
+                                <div class="col-lg-6 text-right">
+                                    Clear Settings :
+                                </div>
+                                <div class="col-lg-6 text-left">
+                                    <button id='clearsetting' class="btn btn-default">Clear!</button>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Optiona Modal End -->
                 </div>
             </div>
         </div>
@@ -112,13 +151,13 @@ $sensor_num = (int)$row[0];
             </div>
             <br/>
         </div>
-        <div class="headertext text-center">Alert Me!</div>
+        <div class="headertext text-center">Alert Me</div>
         <div id="alterme" class="block-info">
             <div class="row">
                 <div class="col-sm-2 col-lg-4"></div>
                 <div class="col-sm-6 col-lg-4">
-                   <div class="input-group"  title="When <?=$str_ServiceName?> is online, we will send you a notice.">
-                    <span class="input-group-addon">@</span><input id="alertemail" type="email" class="form-control input-lg" placeholder="Email Address">
+                   <div class="input-group">
+                    <span class="input-group-addon">@</span><input id="alertemail" type="email" class="form-control input-lg" placeholder="Email Address"  title="When <?=$str_ServiceName?> is online, we will send you a notice." data-toggle="tooltip" data-placement="top">
                     </div>
                 </div>
                 <div class="col-sm-4 col-lg-4">
@@ -127,10 +166,7 @@ $sensor_num = (int)$row[0];
                 </div>
             </div>
         </div>
-        <div class="headertext text-center">Options</div>
-        <div class="block-info text-center">
-            <button id='clearsetting' class="btn btn-default btn-lg">Clear Settings</button>
-        </div>
+        <div class="headertext text-center"></div>
     </div>
     <br><br>
 </body>

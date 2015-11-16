@@ -84,8 +84,8 @@ function UpdateChart(graphdate,period,interval,button){
 var CurrentDataTimer;
 $(document).ready(function ($) {
     UpdateCurrentData();
-    $( document ).tooltip({track: true});
-    $("html").niceScroll();
+    $('[data-toggle="tooltip"]').tooltip();
+    $("html").niceScroll({cursorwidth :'10px'});
     $("#alertsubmit").click(function(){
         if($("#alertemail").val()=="") return;
         prepare_submit();

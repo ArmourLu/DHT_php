@@ -1,6 +1,6 @@
     body {
     font-family: 'Ubuntu', sans-serif !important;
-    background-color: #e6e6e6 !important;
+    background-color: #E9EAED !important;
     }
 
     .ui-widget {
@@ -28,7 +28,8 @@
     font-size: 20px;
     }
 
-    .reading {
+    .reading,
+    .readingdecimal {
         color: #333333;
         font-family: 'Roboto', sans-serif;
         text-align:  left;
@@ -42,13 +43,6 @@
 
     .readingmin {
         font-size: 24px;
-    }
-
-    .readingdecimal {
-        color: #333333;
-        font-family: 'Roboto', sans-serif;
-        text-align:  left;
-        display: inline-block;
     }
 
     .readingdecimalmax {
@@ -84,7 +78,7 @@
     .block-data,
     .block-info,
     .block-header {
-        border-radius: 6px;
+        border-radius: 5px;
         margin-top: 5px;
         padding: 10px;
         border: 1px;

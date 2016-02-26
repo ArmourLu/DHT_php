@@ -1,14 +1,14 @@
 <?
-include "/var/www_private/mysql_conn.php";
+include "/var/www_private/mysqli_conn.php";
 
 $sqlstr = "SELECT Value FROM sysinfo where Name='ServiceName'";
-$result = mysql_query($sqlstr);
-$row = mysql_fetch_row($result);
+$result = mysqli_query($conni, $sqlstr);
+$row = mysqli_fetch_row($result);
 $str_ServiceName = $row[0];
 
 $sqlstr = "SELECT Value FROM sysinfo where Name='SensorCount'";
-$result = mysql_query($sqlstr);
-$row = mysql_fetch_row($result);
+$result = mysqli_query($conni, $sqlstr);
+$row = mysqli_fetch_row($result);
 $sensor_num = (int)$row[0];
 ?>
 <!doctype html>
@@ -67,20 +67,20 @@ $sensor_num = (int)$row[0];
                             <h4 class="modal-title infotext text-left" id="myModalLabel">Options</h4>
                           </div>
                           <div class="modal-body">
-                            <div class="row smallinfotext" title="Refresh Last Data and Time" data-toggle="tooltip" data-placement="bottom">
-                                <div class="col-lg-6 text-right">
+                            <div class="row smallinfotext" title="Refresh The Latest Data and Time" data-toggle="tooltip" data-placement="bottom">
+                                <div class="col-sm-6 text-right">
                                     Auto Refresh :
                                 </div>
-                                <div class="col-lg-6 text-left">
+                                <div class="col-sm-6 text-left">
                                     <input type="checkbox" name="autoupdate">
                                 </div>
                             </div>
                             <br>
-                            <div class="row smallinfotext"  title="Clear all settings for this page" data-toggle="tooltip" data-placement="bottom">
-                                <div class="col-lg-6 text-right">
+                            <div class="row smallinfotext" title="Clear all settings for this page" data-toggle="tooltip" data-placement="bottom">
+                                <div class="col-sm-6 text-right">
                                     Clear Settings :
                                 </div>
-                                <div class="col-lg-6 text-left">
+                                <div class="col-sm-6 text-left">
                                     <button id='clearsetting' class="btn btn-default">Clear!</button>
                                 </div>
                             </div>

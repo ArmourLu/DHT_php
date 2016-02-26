@@ -1,5 +1,5 @@
 <?php
-include "/var/www_private/mysql_conn.php";
+include "/var/www_private/mysqli_conn.php";
 include "/var/www_private/email_hash.php";
 
 //Get email
@@ -15,8 +15,8 @@ $key = strtolower($_GET['key']);
 $id = strtolower($_GET['id']);
 
 $sqlstr = "SELECT Value FROM sysinfo where Name='PythonPath'";
-$result = mysql_query($sqlstr);
-$row = mysql_fetch_row($result);
+$result = mysqli_query($conni, $sqlstr);
+$row = mysqli_fetch_row($result);
 $PythonPath = $row[0];
 
 if($cmd == "verify")
@@ -28,8 +28,8 @@ if($cmd == "verify")
     else
     {
         $sqlstr = "select Email, hash, Enabled from useralert where ID='$id'";
-        $result = mysql_query($sqlstr);
-        $row = mysql_fetch_array($result);
+        $result = mysqli_query($conni, $sqlstr);
+        $row = mysqli_fetch_array($result);
         $email = $row['Email'];
         $hash = $row['hash'];
         $Enabled = $row['Enabled'];
@@ -46,7 +46,7 @@ if($cmd == "verify")
                 $hash = email_hash($email);
                 $curtime = date("Y-m-d H:i:s");
                 $sqlstr = "update useralert set Enabled=TRUE, UpdateTime='$curtime', hash='$hash' where ID='$id'";
-                $result = mysql_query($sqlstr);
+                $result = mysqli_query($conni, $sqlstr);
                 exec("python $PythonPath mail $email remove > /dev/null &");
             }
         }
@@ -66,8 +66,8 @@ elseif($cmd == "remove")
     else
     {
         $sqlstr = "select hash, Enabled from useralert where ID='$id'";
-        $result = mysql_query($sqlstr);
-        $row = mysql_fetch_array($result);
+        $result = mysqli_query($conni, $sqlstr);
+        $row = mysqli_fetch_array($result);
         $hash = $row['hash'];
         $Enabled = $row['Enabled'];
         if($hash == $key)
@@ -77,7 +77,7 @@ elseif($cmd == "remove")
                 $status = "success";
                 $comment = "Your alert had been removed.";
                 $sqlstr = "delete from useralert where ID='$id'";
-                $result = mysql_query($sqlstr);
+                $result = mysqli_query($conni, $sqlstr);
             }else
             {
                 $status = "error";
@@ -100,20 +100,20 @@ elseif($cmd == "add")
     else
     {
         $sqlstr = "select ID, Email, Enabled, UpdateTime from useralert where LOWER(email)='$email'";
-        $result = mysql_query($sqlstr);
+        $result = mysqli_query($conni, $sqlstr);
         if(mysql_num_rows($result) == 0)
         {
             $hash = email_hash($email);
             $curtime = date("Y-m-d H:i:s");
             $sqlstr = "insert into useralert (Email, Type, Enabled, Hash, CreateTime, UpdateTime) VALUES ('$email', 'boot;', FALSE, '$hash', '$curtime', '$curtime')";
-            mysql_query($sqlstr);
+            mysqli_query($conni, $sqlstr);
             $status = "info";
             $comment = "A confirmation email has been sent to your email address. Please click on the Activation Link to activate your alert.";
             exec("python $PythonPath mail $email verify > /dev/null &");
         }
         else
         {
-            $row = mysql_fetch_array($result);
+            $row = mysqli_fetch_array($result);
             if($row['Enabled'] == true)
             {
                 $status = "error";
@@ -132,7 +132,7 @@ elseif($cmd == "add")
                     $curtime = date("Y-m-d H:i:s");
                     $id = $row['ID'];
                     $sqlstr = "update useralert set UpdateTime='$curtime' where ID=$id";
-                    mysql_query($sqlstr);
+                    mysqli_query($conni, $sqlstr);
                     exec("python $PythonPath mail $email verify > /dev/null &");
                 }
                 else

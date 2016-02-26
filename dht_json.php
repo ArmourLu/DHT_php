@@ -1,11 +1,11 @@
 <?php
 $Debug_Table = 0;
-$Debug_Time = 1;
+$Debug_Time = 0;
 $Debug_SQL = 0;
 
 if($Debug_Time) $start = microtime(true);
 
-include "/var/www_private/mysql_conn.php";
+include "/var/www_private/mysqli_conn.php";
 
 if($Debug_Time) $returnjson['ConnectTime'] = number_format((microtime(true) - $start), 2) . "s";
 if($Debug_Time) $start = microtime(true);
@@ -39,8 +39,8 @@ $query_from_datetime = $_GET['f'];
 
 //Get sensor number
 $sqlstr = "SELECT Value FROM sysinfo where Name='SensorCount'";
-$result = mysql_query($sqlstr);
-$row = mysql_fetch_row($result);
+$result = mysqli_query($conni, $sqlstr);
+$row = mysqli_fetch_row($result);
 $sensor_num = (int)$row[0];
 
 if (date('Y-m-d H:i:s', strtotime($query_from_datetime))!= $query_from_datetime)
@@ -79,7 +79,7 @@ else{
 if($Debug_Time) $returnjson['PrepareTime'] = number_format((microtime(true) - $start), 2) . "s";
 if($Debug_Time) $start = microtime(true);
 //Execute SQL
-$result = mysql_query($sqlstr);
+$result = mysqli_query($conni, $sqlstr);
 if($Debug_Time) $returnjson['SQLTime'] = number_format((microtime(true) - $start), 2) . "s";
 $DhtArray = array();
 
@@ -96,7 +96,7 @@ $DupCount = 0;
 
 if($Debug_Time) $start = microtime(true);
 
-while ($row = mysql_fetch_row($result)) {
+while ($row = mysqli_fetch_row($result)) {
 	if($DhtArrayCount>=$query_count) break;
     if($PreDate==$row[2]) continue;
 

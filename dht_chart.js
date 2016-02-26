@@ -114,6 +114,7 @@ function make_chart(){
         }],
         "chartScrollbar": {},
         "chartCursor": {
+            "valueLineEnabled": true,
             "categoryBalloonDateFormat": "MM/DD JJ:NN",
             "cursorPosition": "mouse"
         },
